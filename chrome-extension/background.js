@@ -3,7 +3,7 @@
  * Handles tab audio capture, chunk transcription, and session management.
  */
 
-const CONVOQ_BASE = "https://convoq-ai-powered-meeting-summarizer-js9kvs04p.vercel.app";
+const CONVOQ_BASE = "https://convoq-ai-powered-meeting-summarize.vercel.app";
 const CHUNK_MS    = 30_000; // 30-second transcription chunks
 
 let state = {
@@ -161,7 +161,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   switch (msg.type) {
 
     case "START_RECORDING":
-      startRecording(msg.tabId, msg.title).then(sendResponse);
+      startRecording(msg.tabId || _sender.tab?.id, msg.title).then(sendResponse);
       return true;
 
     case "STOP_RECORDING":
