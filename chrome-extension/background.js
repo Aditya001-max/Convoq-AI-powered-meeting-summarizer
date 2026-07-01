@@ -172,6 +172,10 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       stopRecording(true).then(sendResponse);
       return true;
 
+    case "OPEN_POPUP":
+      chrome.action.openPopup().catch(() => {});
+      break;
+
     case "GET_STATE":
       sendResponse({ state });
       break;

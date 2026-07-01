@@ -88,23 +88,8 @@
   // ── Button handlers ───────────────────────────────────────────────────
 
   startBtn.addEventListener("click", () => {
-    const title = getMeetTitle();
-    chrome.runtime.sendMessage(
-      { type: "START_RECORDING", tabId: null, title },
-      (res) => {
-        if (res && res.ok) {
-          recording = true;
-          setStatus("Recording…", true);
-          startBtn.style.display  = "none";
-          stopBtn.style.display   = "inline-block";
-          finalBtn.style.display  = "inline-block";
-          titleRow.style.display  = "none";
-          chunksEl.style.display  = "block";
-        } else {
-          setStatus("Error — see popup", false);
-        }
-      }
-    );
+    setStatus("Click the Convoq icon in your toolbar ↑", false);
+    chrome.runtime.sendMessage({ type: "OPEN_POPUP" });
   });
 
   stopBtn.addEventListener("click", () => {
