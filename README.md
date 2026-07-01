@@ -1,12 +1,12 @@
 # Convoq — AI Meeting Intelligence
 
 **Turn any meeting transcript into action in seconds.**
-Powered by Anthropic Claude. No manual note-taking. No missed follow-ups. No friction.
+No manual note-taking. No missed follow-ups. No friction.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-black?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-3.0-black?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![Powered by Claude](https://img.shields.io/badge/AI-Anthropic%20Claude-black?style=flat-square)](https://anthropic.com)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-black?style=flat-square)](https://github.com/Aditya001-max/Convoq-AI-powered-meeting-summarizer)
 
 ---
 
@@ -37,7 +37,7 @@ Paste a transcript, upload a file, or record live — Convoq does the rest.
 |---|---|
 | Backend | Flask 3.0, App Factory, Blueprints |
 | Database | SQLite (local) · PostgreSQL via Neon (production) |
-| AI — text | Anthropic Claude `claude-haiku-4-5-20251001` |
+| AI — text | Convoq AI Engine |
 | AI — audio | Groq Whisper API (cloud) · local openai-whisper (dev) |
 | Frontend | Bootstrap 5 · custom warm minimalistic CSS · Chart.js |
 | PDF | ReportLab |
@@ -72,16 +72,14 @@ Convoq creates its SQLite database and seeds all built-in AI recipes on first ru
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yes | All AI text features (Claude) |
+| `AI_API_KEY` | Yes | All AI text features |
 | `GROQ_API_KEY` | For audio | Cloud audio transcription (free tier: 7,200s/day) |
 | `SECRET_KEY` | Yes (prod) | Flask session signing |
 | `DATABASE_URL` | For prod | PostgreSQL connection string (Neon, Supabase, etc.) |
 | `GOOGLE_CLIENT_ID` | Optional | Google Calendar integration |
 | `GOOGLE_CLIENT_SECRET` | Optional | Google Calendar integration |
 
-Get your keys:
-- Anthropic — [console.anthropic.com](https://console.anthropic.com)
-- Groq — [console.groq.com](https://console.groq.com) (free)
+See `.env.example` for setup instructions.
 
 ---
 
@@ -121,7 +119,7 @@ The app is fully Vercel-ready — `vercel.json` and `api/index.py` are already c
 │   ├── models.py                # Meeting, ActionItem, Recipe
 │   ├── routes.py                # All routes (28 endpoints)
 │   ├── services/
-│   │   ├── ai_service.py        # Claude + Groq Whisper
+│   │   ├── ai_service.py        # AI engine + Groq Whisper
 │   │   ├── pdf_service.py       # ReportLab PDF export
 │   │   └── calendar_service.py  # Google Calendar OAuth
 │   ├── static/

@@ -44,7 +44,7 @@ POST /api/transcribe-chunk (local Whisper)
         ↓
 Accumulated transcript
         ↓
-POST /process (Claude AI extraction)
+POST /process (Convoq AI extraction)
         ↓
 Convoq results page
 ```
