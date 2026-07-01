@@ -55,17 +55,30 @@ startBtn.addEventListener("click", async () => {
   const tab = await checkTab();
   if (!tab) return;
 
-  chrome.runtime.sendMessage(
-    { type: "START_RECORDING", tabId: tab.id, title: tab.title },
-    (res) => {
-      if (res?.ok) {
-        setStatus("Recording…", true);
-        showButtons(true);
-      } else {
-        setStatus("Error: " + (res?.error || "unknown"), false);
-      }
+  setStatus("Starting…", false);
+  startBtn.disabled = true;
+
+  // tabCapture must be called here in the popup (where the user gesture lives).
+  // Calling it from the background service worker loses the gesture context.
+  chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (streamId) => {
+    if (chrome.runtime.lastError || !streamId) {
+      setStatus("Error: " + (chrome.runtime.lastError?.message || "no stream"), false);
+      startBtn.disabled = false;
+      return;
     }
-  );
+    chrome.runtime.sendMessage(
+      { type: "START_WITH_STREAM", streamId, tabId: tab.id, title: tab.title },
+      (res) => {
+        if (res?.ok) {
+          setStatus("Recording…", true);
+          showButtons(true);
+        } else {
+          setStatus("Error: " + (res?.error || "unknown"), false);
+          startBtn.disabled = false;
+        }
+      }
+    );
+  });
 });
 
 stopBtn.addEventListener("click", () => {

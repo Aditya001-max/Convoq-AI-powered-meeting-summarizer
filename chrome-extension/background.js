@@ -65,6 +65,26 @@ async function startRecording(tabId, title) {
   }
 }
 
+// ── Start recording with a pre-obtained stream ID (from popup) ───────────────
+
+async function startRecordingWithStream(streamId, tabId, title) {
+  if (state.recording) return { ok: false, error: "Already recording" };
+
+  state = {
+    recording:    true,
+    tabId,
+    sessionTitle: title || "Google Meet Recording",
+    chunks:       [],
+    startTime:    Date.now(),
+  };
+
+  await chrome.storage.session.set({ convoqState: state });
+  await ensureOffscreen();
+  chrome.runtime.sendMessage({ type: "START_CAPTURE", streamId, chunkMs: CHUNK_MS });
+
+  return { ok: true };
+}
+
 // ── Stop recording + finalise ─────────────────────────────────────────────
 
 async function stopRecording(submit = false) {
@@ -159,6 +179,10 @@ function base64ToBlob(base64, mimeType) {
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   switch (msg.type) {
+
+    case "START_WITH_STREAM":
+      startRecordingWithStream(msg.streamId, msg.tabId, msg.title).then(sendResponse);
+      return true;
 
     case "START_RECORDING":
       startRecording(msg.tabId || _sender.tab?.id, msg.title).then(sendResponse);
