@@ -13,7 +13,8 @@
 
   "host_permissions": [
     "https://meet.google.com/*",
-    "http://localhost:5000/*"
+    "http://localhost:5000/*",
+    "https://convoq-ai-powered-meeting-summarizer-js9kvs04p.vercel.app/*"
   ],
 
   "background": {

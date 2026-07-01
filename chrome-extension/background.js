@@ -3,7 +3,7 @@
  * Handles tab audio capture, chunk transcription, and session management.
  */
 
-const CONVOQ_BASE = "http://localhost:5000";
+const CONVOQ_BASE = "https://convoq-ai-powered-meeting-summarizer-js9kvs04p.vercel.app";
 const CHUNK_MS    = 30_000; // 30-second transcription chunks
 
 let state = {
@@ -92,7 +92,7 @@ async function submitToConvoq(transcript, title, durationMinutes) {
   const body = new URLSearchParams({
     transcript_text:  transcript,
     meeting_type:     "general",
-    title:            title,
+    meeting_title:    title,
     duration_minutes: durationMinutes,
   });
 

@@ -367,7 +367,7 @@ def process_transcript():
             transcript_text = transcribe_audio(filepath)
             os.remove(filepath)
             if not transcript_text:
-                flash("Audio transcription failed. Ensure OPENAI_API_KEY is set for Whisper.", "error")
+                flash("Audio transcription failed. Ensure GROQ_API_KEY is set in your environment.", "error")
                 return redirect(url_for("main.upload_page"))
 
     # Prepend scratchpad notes to transcript for richer AI context
