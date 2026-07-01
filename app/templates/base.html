@@ -21,7 +21,7 @@
     <div class="announce-bar" id="announce-bar">
       <span class="announce-badge">New</span>
       <span>Convoq for Google Meet — record &amp; transcribe calls automatically.</span>
-      <a href="#" onclick="openExtModal(event)" class="announce-link">Install the Chrome Extension →</a>
+      <a href="#" class="announce-link" data-bs-toggle="modal" data-bs-target="#extInstallModal">Install the Chrome Extension →</a>
       <button class="announce-close" onclick="document.getElementById('announce-bar').style.display='none'" aria-label="Dismiss">×</button>
     </div>
 
@@ -136,7 +136,7 @@
     </footer>
 
     <!-- ── Floating Chrome Extension CTA ───────────────────────────────── -->
-    <a href="#" onclick="openExtModal(event)" class="chrome-float" id="chrome-float-btn">
+    <a href="#" class="chrome-float" id="chrome-float-btn" data-bs-toggle="modal" data-bs-target="#extInstallModal">
       <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
         <circle cx="24" cy="24" r="10" fill="#4285F4"/>
         <path d="M24 14h18.93A22 22 0 1 0 24 46V34a10 10 0 1 1 0-20z" fill="#EA4335"/>
