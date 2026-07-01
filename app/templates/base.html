@@ -173,55 +173,56 @@
 
           <div class="modal-body" style="padding:1rem 1.5rem 1.5rem">
 
-            <!-- Step-by-step install -->
-            <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem">
-
-              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.875rem 1rem">
-                <div style="width:28px;height:28px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
-                <div>
-                  <div style="font-weight:600;font-size:.875rem;margin-bottom:.2rem">Download the extension</div>
-                  <div style="font-size:.8rem;color:var(--text-2)">Click the button below to download the Convoq extension ZIP file.</div>
-                </div>
-              </div>
-
-              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.875rem 1rem">
-                <div style="width:28px;height:28px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
-                <div>
-                  <div style="font-weight:600;font-size:.875rem;margin-bottom:.2rem">Unzip &amp; open Chrome Extensions</div>
-                  <div style="font-size:.8rem;color:var(--text-2)">Unzip the file. In Chrome go to <code style="background:#EEF4FF;padding:1px 5px;border-radius:4px;font-size:.75rem">chrome://extensions</code> and enable <strong>Developer mode</strong> (top-right toggle).</div>
-                </div>
-              </div>
-
-              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.875rem 1rem">
-                <div style="width:28px;height:28px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
-                <div>
-                  <div style="font-weight:600;font-size:.875rem;margin-bottom:.2rem">Load the extension</div>
-                  <div style="font-size:.8rem;color:var(--text-2)">Unzip the downloaded file. Click <strong>Load unpacked</strong> and select the unzipped folder directly — it contains only the extension files. Done!</div>
-                </div>
-              </div>
-
-              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:.875rem 1rem">
-                <div style="width:28px;height:28px;border-radius:50%;background:#16A34A;color:#fff;font-size:.875rem;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi bi-check-lg"></i></div>
-                <div>
-                  <div style="font-weight:600;font-size:.875rem;margin-bottom:.2rem;color:#14532D">Join any Google Meet</div>
-                  <div style="font-size:.8rem;color:#166534">A blue Convoq widget appears automatically. Hit <strong>Start Recording</strong> — your summary will appear here when the call ends.</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Download CTA -->
-            <a href="https://download-directory.github.io/?url=https://github.com/Aditya001-max/Convoq-AI-powered-meeting-summarizer/tree/vercel-deploy/chrome-extension"
-               target="_blank" rel="noopener"
-               style="display:flex;align-items:center;justify-content:center;gap:10px;background:#0A65FF;color:#fff;font-weight:600;font-size:.9375rem;padding:13px 24px;border-radius:99px;text-decoration:none;margin-bottom:.75rem;transition:background .18s"
+            <!-- Download CTA — first so user grabs it before reading steps -->
+            <a href="{{ url_for('static', filename='convoq-extension.zip') }}"
+               download="convoq-extension.zip"
+               style="display:flex;align-items:center;justify-content:center;gap:10px;background:#0A65FF;color:#fff;font-weight:600;font-size:.9375rem;padding:13px 24px;border-radius:99px;text-decoration:none;margin-bottom:1.1rem;transition:background .18s"
                onmouseover="this.style.background='#0850CC'"
                onmouseout="this.style.background='#0A65FF'">
               <i class="bi bi-download"></i>
-              Download Extension (ZIP)
+              Download Convoq Extension (ZIP)
             </a>
 
-            <p style="font-size:.74rem;color:var(--text-3);text-align:center;margin:0">
+            <!-- Step-by-step install -->
+            <div style="display:flex;flex-direction:column;gap:.65rem;margin-bottom:1rem">
+
+              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.8rem 1rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+                <div>
+                  <div style="font-weight:600;font-size:.84rem;margin-bottom:.15rem">Unzip the downloaded file</div>
+                  <div style="font-size:.78rem;color:var(--text-2)">Right-click <code style="background:#EEF4FF;padding:1px 5px;border-radius:4px">convoq-extension.zip</code> → <strong>Extract All</strong>. You'll get a single folder called <code style="background:#EEF4FF;padding:1px 5px;border-radius:4px">convoq-extension</code>.</div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.8rem 1rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+                <div>
+                  <div style="font-weight:600;font-size:.84rem;margin-bottom:.15rem">Open Chrome Extensions &amp; enable Developer mode</div>
+                  <div style="font-size:.78rem;color:var(--text-2)">In Chrome, go to <code style="background:#EEF4FF;padding:1px 5px;border-radius:4px">chrome://extensions</code> — toggle <strong>Developer mode</strong> ON (top-right corner).</div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F8FAFC;border-radius:12px;padding:.8rem 1rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:#0A65FF;color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+                <div>
+                  <div style="font-weight:600;font-size:.84rem;margin-bottom:.15rem">Click "Load unpacked" → select the folder</div>
+                  <div style="font-size:.78rem;color:var(--text-2)">Click <strong>Load unpacked</strong>, navigate to the <code style="background:#EEF4FF;padding:1px 5px;border-radius:4px">convoq-extension</code> folder you just unzipped, and click <strong>Select Folder</strong>. That's it!</div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.875rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:.8rem 1rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:#16A34A;color:#fff;font-size:.875rem;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi bi-check-lg"></i></div>
+                <div>
+                  <div style="font-weight:600;font-size:.84rem;margin-bottom:.15rem;color:#14532D">Join any Google Meet — you're live</div>
+                  <div style="font-size:.78rem;color:#166534">A blue Convoq widget appears in the call. Hit <strong>Start Recording</strong> — your AI summary appears here the moment you end the call.</div>
+                </div>
+              </div>
+
+            </div>
+
+            <p style="font-size:.72rem;color:var(--text-3);text-align:center;margin:0">
               <i class="bi bi-shield-check me-1" style="color:var(--green)"></i>
-              Open source &bull; No data leaves your account &bull; Free forever
+              Open source &bull; Audio never stored &bull; Free forever
             </p>
           </div>
         </div>
