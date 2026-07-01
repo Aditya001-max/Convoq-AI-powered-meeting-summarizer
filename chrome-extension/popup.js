@@ -63,7 +63,8 @@ startBtn.addEventListener("click", () => {
     setStatus("Starting…", false);
     startBtn.disabled = true;
 
-    chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (streamId) => {
+    // Omit targetTabId — Chrome uses the active tab (Meet) directly from the popup context.
+    chrome.tabCapture.getMediaStreamId({}, (streamId) => {
       if (chrome.runtime.lastError || !streamId) {
         setStatus("Err: " + (chrome.runtime.lastError?.message || "no stream"), false);
         startBtn.disabled = false;
