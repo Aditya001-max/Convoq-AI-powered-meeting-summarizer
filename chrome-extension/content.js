@@ -14,7 +14,7 @@
     <div id="cq-header">
       <div id="cq-logo">
         <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
-          <rect width="22" height="22" rx="6" fill="#C2410C"/>
+          <rect width="22" height="22" rx="6" fill="#0A65FF"/>
           <path d="M6 8h10M6 11h7M6 14h5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
         <span>Convoq</span>

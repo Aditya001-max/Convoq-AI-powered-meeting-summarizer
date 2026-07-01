@@ -126,7 +126,7 @@
   background: #FFFFFF;
 }
 
-#cq-title:focus { border-color: #C2410C; box-shadow: 0 0 0 2px rgba(194,65,12,.1); }
+#cq-title:focus { border-color: #0A65FF; box-shadow: 0 0 0 2px rgba(10,101,255,.1); }
 
 /* Buttons */
 #cq-actions {
@@ -149,10 +149,10 @@
 }
 
 .cq-btn-primary {
-  background: #C2410C;
+  background: #0A65FF;
   color: white;
 }
-.cq-btn-primary:hover { background: #9A3412; }
+.cq-btn-primary:hover { background: #0850CC; }
 
 .cq-btn-secondary {
   background: #F5F0EA;
@@ -162,8 +162,8 @@
 .cq-btn-secondary:hover { background: #E8E3DA; }
 
 .cq-btn-accent {
-  background: #FFF7ED;
-  color: #C2410C;
-  border: 1px solid #FED7AA;
+  background: #EEF4FF;
+  color: #0A65FF;
+  border: 1px solid #BFDBFE;
 }
-.cq-btn-accent:hover { background: #FED7AA; }
+.cq-btn-accent:hover { background: #BFDBFE; }
