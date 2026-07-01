@@ -51,33 +51,37 @@ function syncState() {
 
 // ── Button handlers ───────────────────────────────────────────────────────
 
-startBtn.addEventListener("click", async () => {
-  const tab = await checkTab();
-  if (!tab) return;
-
-  setStatus("Starting…", false);
-  startBtn.disabled = true;
-
-  // tabCapture must be called here in the popup (where the user gesture lives).
-  // Calling it from the background service worker loses the gesture context.
-  chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (streamId) => {
-    if (chrome.runtime.lastError || !streamId) {
-      setStatus("Error: " + (chrome.runtime.lastError?.message || "no stream"), false);
-      startBtn.disabled = false;
+startBtn.addEventListener("click", () => {
+  // Use callbacks only — async/await breaks Chrome's user gesture context,
+  // which tabCapture requires to be alive when getMediaStreamId is called.
+  chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+    if (!tab || !tab.url?.includes("meet.google.com")) {
+      notMeet.style.display = "block";
       return;
     }
-    chrome.runtime.sendMessage(
-      { type: "START_WITH_STREAM", streamId, tabId: tab.id, title: tab.title },
-      (res) => {
-        if (res?.ok) {
-          setStatus("Recording…", true);
-          showButtons(true);
-        } else {
-          setStatus("Error: " + (res?.error || "unknown"), false);
-          startBtn.disabled = false;
-        }
+    notMeet.style.display = "none";
+    setStatus("Starting…", false);
+    startBtn.disabled = true;
+
+    chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (streamId) => {
+      if (chrome.runtime.lastError || !streamId) {
+        setStatus("Err: " + (chrome.runtime.lastError?.message || "no stream"), false);
+        startBtn.disabled = false;
+        return;
       }
-    );
+      chrome.runtime.sendMessage(
+        { type: "START_WITH_STREAM", streamId, tabId: tab.id, title: tab.title },
+        (res) => {
+          if (res?.ok) {
+            setStatus("Recording…", true);
+            showButtons(true);
+          } else {
+            setStatus("Err: " + (res?.error || "unknown"), false);
+            startBtn.disabled = false;
+          }
+        }
+      );
+    });
   });
 });
 
@@ -85,9 +89,14 @@ stopBtn.addEventListener("click", () => {
   chrome.runtime.sendMessage({ type: "STOP_RECORDING" }, () => {
     setStatus("Paused", false);
     stopBtn.textContent = "▶ Resume";
-    stopBtn.onclick = async () => {
-      const tab = await checkTab();
-      chrome.runtime.sendMessage({ type: "START_RECORDING", tabId: tab?.id, title: "" }, syncState);
+    stopBtn.onclick = () => {
+      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+        if (!tab) return;
+        chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (streamId) => {
+          if (!streamId || chrome.runtime.lastError) return;
+          chrome.runtime.sendMessage({ type: "START_WITH_STREAM", streamId, tabId: tab.id, title: tab.title }, syncState);
+        });
+      });
     };
   });
 });
