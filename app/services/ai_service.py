@@ -1,126 +1,307 @@
 """
-AI processing module for CorpMeet-AI application.
-Contains functions to process meeting transcripts and extract structured data using OpenAI.
+AI processing module for Convoq.
+Primary: Anthropic Claude for all text analysis.
+Audio transcription: local openai-whisper (no API key, no cost).
 """
 
 import json
 import os
-from datetime import datetime
-from openai import OpenAI
+import re
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# Initialize OpenAI Client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+_anthropic_client = None
 
 
-def process_meeting_transcript(transcript_text):
-    """
-    Process meeting transcript using OpenAI to extract structured information.
-    """
+def get_anthropic_client():
+    global _anthropic_client
+    if _anthropic_client is None:
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            return None
+        from anthropic import Anthropic
+        _anthropic_client = Anthropic(api_key=api_key)
+    return _anthropic_client
 
-    # Check if API key is set, if not, fall back to mock data (or error out gracefully)
-    if (
-        not os.getenv("OPENAI_API_KEY")
-        or os.getenv("OPENAI_API_KEY") == "sk-your-key-here"
-    ):
-        print("WARNING: OpenAI API Key not found. Using Mock Data.")
-        return generate_mock_data(transcript_text)
 
-    system_prompt = """
-    You are an expert Corporate Secretary and AI Assistant. Your task is to analyze meeting transcripts and extract structured data.
-    
-    Return the output STRICTLY as a valid JSON object with the following schema:
+# ── Meeting type templates ────────────────────────────────────────────────────
+
+MEETING_TEMPLATES = {
+    "general": {
+        "label": "General Meeting",
+        "hint": "This is a general business meeting. Extract all action items, decisions, and discussion topics.",
+    },
+    "sales": {
+        "label": "Sales Call",
+        "hint": (
+            "This is a sales call or client meeting. Pay special attention to: "
+            "pain points expressed, budget signals, decision-maker names, objections raised, "
+            "next steps committed to, and follow-up promises."
+        ),
+    },
+    "sprint": {
+        "label": "Sprint Review / Planning",
+        "hint": (
+            "This is an agile sprint meeting. Focus on: completed stories, incomplete items, "
+            "velocity discussion, blockers, next sprint commitments, and retrospective action items."
+        ),
+    },
+    "board": {
+        "label": "Board Meeting",
+        "hint": (
+            "This is a board-level or executive meeting. Focus on: strategic decisions, "
+            "financial approvals, governance items, risk acceptance, and executive-level action items."
+        ),
+    },
+    "standup": {
+        "label": "Daily Standup",
+        "hint": (
+            "This is a daily standup. Extract what each person completed yesterday, "
+            "what they plan to do today, and any blockers reported."
+        ),
+    },
+}
+
+EXTRACTION_SCHEMA = """
+{
+  "summary": ["concise point 1", "concise point 2", "..."],
+  "action_items": [
     {
-        "summary": ["point 1", "point 2", "point 3", "point 4"],
-        "action_items": [
-            {"task": "specific action", "owner": "person name", "deadline": "YYYY-MM-DD or 'Asap'"}
-        ],
-        "decisions": ["decision 1", "decision 2"],
-        "sentiment": "Positive" | "Neutral" | "Negative" | "Tense" | "Productive",
-        "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"]
+      "task": "specific action",
+      "owner": "person name or 'Unassigned'",
+      "due_date": "YYYY-MM-DD or 'TBD'",
+      "priority": "High | Medium | Low",
+      "source_quote": "the exact phrase from the transcript that implies this action"
     }
-    
-    Rules:
-    1. Summary should be concise but professional.
-    2. Extract at least 3-5 action items. If no specific deadline is mentioned, infer a reasonable one or use "TBD".
-    3. Identify clear decisions.
-    4. Determine the overall sentiment of the meeting.
-    """
+  ],
+  "decisions": ["decision 1", "decision 2"],
+  "risks": ["risk or blocker 1", "risk or blocker 2"],
+  "sentiment": "Positive | Neutral | Negative | Tense | Productive",
+  "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "attendees": ["Name 1", "Name 2"],
+  "follow_up_email": "ready-to-send follow-up email body (plain text, 150-200 words)"
+}
+"""
 
+_EXTRACTION_SYSTEM = """You are Convoq, an expert AI meeting analyst and corporate secretary.
+{hint}
+
+Analyse the transcript and return STRICTLY valid JSON matching this schema:
+{schema}
+
+Rules:
+- Extract 4-6 summary points.
+- Extract ALL action items with inferred owners where possible.
+- Priority: High = urgent/blocker/this week, Medium = normal, Low = nice-to-have.
+- source_quote must be a short verbatim phrase from the transcript (max 20 words).
+- follow_up_email should start with a greeting and close with "Best regards," and a blank signature line.
+- Return ONLY the raw JSON object. No markdown code fences. No preamble. No explanation."""
+
+
+def _strip_fences(text: str) -> str:
+    """Remove markdown code fences Claude occasionally wraps around JSON."""
+    text = re.sub(r"^```(?:json)?\s*", "", text.strip())
+    text = re.sub(r"\s*```$", "", text)
+    return text.strip()
+
+
+def process_meeting_transcript(transcript_text: str, meeting_type: str = "general") -> dict:
+    """Extract structured data from a meeting transcript using Claude."""
+    template = MEETING_TEMPLATES.get(meeting_type, MEETING_TEMPLATES["general"])
+    system_prompt = _EXTRACTION_SYSTEM.format(hint=template["hint"], schema=EXTRACTION_SCHEMA)
+
+    client = get_anthropic_client()
+    if client:
+        try:
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=3000,
+                system=system_prompt,
+                messages=[{"role": "user", "content": f"Transcript:\n\n{transcript_text}"}],
+            )
+            raw = _strip_fences(response.content[0].text)
+            return json.loads(raw)
+        except Exception as exc:
+            print(f"[Convoq AI] Anthropic extraction error: {exc}")
+
+    return _mock_data()
+
+
+def transcribe_audio(file_path: str) -> str:
+    """Transcribe audio via Groq Whisper API (cloud) or local openai-whisper (local dev)."""
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        try:
+            from groq import Groq as GroqClient
+            client = GroqClient(api_key=groq_key)
+            with open(file_path, "rb") as f:
+                result = client.audio.transcriptions.create(
+                    model="whisper-large-v3",
+                    file=f,
+                )
+            return result.text.strip()
+        except Exception as exc:
+            print(f"[Convoq AI] Groq transcription error: {exc}")
+            return ""
+
+    # Fallback: local openai-whisper (works only in local dev with ffmpeg installed)
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",  # Use a cost-effective but capable model
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {
-                    "role": "user",
-                    "content": f"Analyze this meeting transcript:\n\n{transcript_text}",
-                },
-            ],
-            response_format={"type": "json_object"},
-            temperature=0.3,
-        )
-
-        result_json = response.choices[0].message.content
-        return json.loads(result_json)
-
-    except Exception as e:
-        print(f"Error calling OpenAI: {e}")
-        return generate_mock_data(transcript_text)
+        import whisper
+        model = whisper.load_model("base")
+        result = model.transcribe(file_path)
+        return result.get("text", "").strip()
+    except ImportError:
+        print("[Convoq AI] No transcription backend available. Set GROQ_API_KEY for cloud transcription.")
+        return ""
+    except Exception as exc:
+        print(f"[Convoq AI] Whisper transcription error: {exc}")
+        return ""
 
 
-def chat_with_meeting_context(transcript_text, user_question):
-    """
-    Allow users to ask questions about the meeting.
-    """
-    if not os.getenv("OPENAI_API_KEY"):
-        return "AI features are not enabled. Please configure your API Key."
+def chat_with_meeting_context(transcript_text: str, user_question: str) -> str:
+    """Answer a question about a meeting transcript."""
+    system = (
+        "You are Convoq, a helpful meeting assistant. "
+        "Answer questions about the meeting transcript provided. "
+        "Be concise, specific, and factual. Only use information from the transcript."
+    )
 
-    try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant answering questions about a specific meeting transcript. Answer based ONLY on the provided text.",
-                },
-                {
-                    "role": "user",
-                    "content": f"Transcript:\n{transcript_text}\n\nQuestion: {user_question}",
-                },
-            ],
-            temperature=0.5,
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"Error: {str(e)}"
+    client = get_anthropic_client()
+    if client:
+        try:
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=600,
+                system=system,
+                messages=[
+                    {"role": "user", "content": f"Transcript:\n{transcript_text}\n\nQuestion: {user_question}"}
+                ],
+            )
+            return response.content[0].text
+        except Exception as exc:
+            return f"Error: {exc}"
+
+    return "AI features are not enabled. Add ANTHROPIC_API_KEY to your .env file."
 
 
-def generate_mock_data(transcript_text):
-    """Fallback mock data generator for when API key is missing."""
+def apply_recipe(prompt_template: str, transcript_text: str) -> str:
+    """Run a saved recipe prompt against a meeting transcript."""
+    full_prompt = f"{prompt_template}\n\nMeeting transcript:\n\n{transcript_text}"
+
+    client = get_anthropic_client()
+    if client:
+        try:
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=1500,
+                messages=[{"role": "user", "content": full_prompt}],
+            )
+            return response.content[0].text
+        except Exception as exc:
+            print(f"[Convoq AI] Recipe error: {exc}")
+
+    return "AI not available. Add ANTHROPIC_API_KEY to your .env file."
+
+
+def generate_follow_up_email(meeting_title: str, summary: list, action_items: list, decisions: list) -> str:
+    """Generate a polished follow-up email for a meeting."""
+    items_text = "\n".join(
+        f"- {i.get('task','?')} ({i.get('owner','?')}, due {i.get('due_date','TBD')})"
+        for i in action_items
+    )
+    decisions_text = "\n".join(f"- {d}" for d in decisions)
+    prompt = (
+        f"Write a professional meeting follow-up email for '{meeting_title}'.\n"
+        f"Summary points: {json.dumps(summary)}\n"
+        f"Action items:\n{items_text}\n"
+        f"Decisions made:\n{decisions_text}\n"
+        "Keep it under 200 words. Plain text only. Start with 'Hi team,' and end with 'Best regards,'"
+    )
+
+    client = get_anthropic_client()
+    if client:
+        try:
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=400,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return response.content[0].text
+        except Exception as exc:
+            print(f"[Convoq AI] Email error: {exc}")
+
+    return _mock_email(meeting_title, action_items)
+
+
+# ── Fallbacks ─────────────────────────────────────────────────────────────────
+
+def _mock_data() -> dict:
     return {
         "summary": [
-            "Discussed project timeline and key deliverables.",
-            "Identified potential risks in the deployment phase.",
-            "Agreed on the new marketing strategy for Q4.",
-            "Team needs to focus on user testing feedback.",
+            "Discussed project timeline and key deliverables for the upcoming quarter.",
+            "Identified deployment risks and mitigation strategies.",
+            "Agreed on marketing strategy and budget allocation for Q4.",
+            "Team flagged capacity constraints in the engineering squad.",
+            "Decided to move forward with Vendor A based on pricing and support.",
         ],
         "action_items": [
             {
-                "task": "Update documentation",
+                "task": "Prepare updated project timeline with milestones",
                 "owner": "Sarah",
-                "deadline": "2024-05-20",
+                "due_date": "TBD",
+                "priority": "High",
+                "source_quote": "we need the timeline ready before the client call",
             },
-            {"task": "Fix login bug", "owner": "Mike", "deadline": "2024-05-18"},
-            {"task": "Schedule client demo", "owner": "John", "deadline": "2024-05-25"},
+            {
+                "task": "Fix critical login bug reported by QA",
+                "owner": "Mike",
+                "due_date": "TBD",
+                "priority": "High",
+                "source_quote": "the login issue has to be fixed this sprint",
+            },
+            {
+                "task": "Schedule client demo and send calendar invites",
+                "owner": "John",
+                "due_date": "TBD",
+                "priority": "Medium",
+                "source_quote": "John can you set up the demo call",
+            },
         ],
         "decisions": [
-            "Approved the new UI design.",
-            "Postponed the feature launch by one week.",
+            "Approved new UI design with accessibility improvements.",
+            "Feature launch postponed by one week to allow for QA completion.",
+            "Vendor A selected for infrastructure contract.",
+        ],
+        "risks": [
+            "Engineering capacity is at 90% — any new requests will slip the timeline.",
+            "Third-party API dependency has no SLA — fallback plan needed.",
         ],
         "sentiment": "Productive",
-        "keywords": ["Strategy", "Budget", "Timeline", "Risk", "Launch"],
+        "keywords": ["Timeline", "Launch", "QA", "Vendor", "Capacity"],
+        "attendees": ["Sarah", "Mike", "John"],
+        "follow_up_email": (
+            "Hi team,\n\nThank you for a productive session today. "
+            "Here is a quick summary of what we covered and what comes next.\n\n"
+            "Key decisions: we approved the new UI design and selected Vendor A. "
+            "The feature launch is moved by one week to allow QA to complete.\n\n"
+            "Action items:\n"
+            "- Sarah: updated project timeline\n"
+            "- Mike: fix critical login bug\n"
+            "- John: schedule client demo\n\n"
+            "Please update your items in Convoq as you make progress.\n\n"
+            "Best regards,\n"
+        ),
     }
+
+
+def _mock_email(meeting_title: str, action_items: list) -> str:
+    items = "\n".join(
+        f"- {i.get('task', '?')} ({i.get('owner', 'TBD')})"
+        for i in action_items[:5]
+    )
+    return (
+        f"Hi team,\n\nThank you for joining today's '{meeting_title}' session.\n\n"
+        f"Action items agreed:\n{items}\n\n"
+        "Please update your tasks in Convoq as progress is made.\n\nBest regards,\n"
+    )

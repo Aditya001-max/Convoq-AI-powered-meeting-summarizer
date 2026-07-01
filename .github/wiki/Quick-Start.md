@@ -1,6 +1,6 @@
-# 🚀 Quick Start Guide
+﻿# 🚀 Quick Start Guide
 
-Get CorpMeet-AI up and running in just **5 minutes**! This guide will walk you through your first AI-powered meeting analysis.
+Get Convoq up and running in just **5 minutes**! This guide will walk you through your first AI-powered meeting analysis.
 
 ## 📋 Prerequisites
 
@@ -14,7 +14,7 @@ Before starting, ensure you have:
 
 ### 📁 Clone the Repository
 ```bash
-git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
+git clone https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
 cd AI-Powered-Corporate-Meeting-Minutes-Action-Tracker
 ```
 
@@ -49,10 +49,10 @@ python app.py
 
 You should see:
 ```
-🚀 CorpMeet-AI Server Starting...
+🚀 Convoq Server Starting...
 📊 Database initialized successfully
 🌐 Server running on http://localhost:5000
-💡 Visit the URL above to access CorpMeet-AI
+💡 Visit the URL above to access Convoq
 ```
 
 ### 🎉 Access the Interface
@@ -214,7 +214,7 @@ Once processing completes, you'll see:
 ## 🎉 Success!
 
 You've successfully:
-- ✅ Installed CorpMeet-AI
+- ✅ Installed Convoq
 - ✅ Processed your first meeting
 - ✅ Generated a professional report
 - ✅ Explored key features
@@ -222,9 +222,9 @@ You've successfully:
 ## 🤝 Need Help?
 
 - 📖 **Full Documentation**: [Wiki Home](Home)
-- 🐛 **Report Issues**: [GitHub Issues](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
-- 💬 **Community**: [Discussions](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
-- 📧 **Direct Support**: [Contact Us](mailto:support@corpmeeting.ai)
+- 🐛 **Report Issues**: [GitHub Issues](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
+- 💬 **Community**: [Discussions](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
+- 📧 **Direct Support**: [Contact Us](mailto:support@convoq.ai)
 
 ---
 

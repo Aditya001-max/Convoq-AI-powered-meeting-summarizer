@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Convoq</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 280px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      background: #FAFAF8;
+      color: #1C1917;
+    }
+
+    /* Header */
+    .header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E8E3DA;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-logo {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -.03em;
+    }
+    .header-version {
+      font-size: 10px;
+      color: #A8A29E;
+      margin-left: auto;
+    }
+
+    /* Body */
+    .body { padding: 16px; }
+
+    /* Status card */
+    .status-card {
+      background: #FFFFFF;
+      border: 1px solid #E8E3DA;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .dot-idle { width:8px;height:8px;border-radius:50%;background:#A8A29E;flex-shrink:0; }
+    .dot-rec  { width:8px;height:8px;border-radius:50%;background:#DC2626;flex-shrink:0;
+                animation: pulse 1.4s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .status-label { font-weight: 500; font-size: 13px; }
+    .chunks-line  { font-size: 11px; color: #A8A29E; margin-top: 2px; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 9px 14px;
+      border-radius: 7px;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .btn:last-child { margin-bottom: 0; }
+    .btn-primary  { background:#C2410C; color:white; }
+    .btn-primary:hover  { background:#9A3412; }
+    .btn-secondary{ background:#F5F0EA; color:#57534E; border:1px solid #E8E3DA; }
+    .btn-secondary:hover{ background:#E8E3DA; }
+    .btn-accent   { background:#FFF7ED; color:#C2410C; border:1px solid #FED7AA; }
+    .btn-accent:hover   { background:#FED7AA; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+
+    /* Open Convoq link */
+    .footer-link {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: #A8A29E;
+      text-decoration: none;
+      padding-top: 8px;
+      border-top: 1px solid #E8E3DA;
+      margin-top: 4px;
+    }
+    .footer-link:hover { color: #C2410C; }
+
+    /* Not-in-meet message */
+    .not-meet {
+      background: #FFF7ED;
+      border: 1px solid #FED7AA;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      color: #92400E;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+      <rect width="22" height="22" rx="6" fill="#C2410C"/>
+      <path d="M6 8h10M6 11h7M6 14h5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="header-logo">Convoq</span>
+    <span class="header-version">v1.0</span>
+  </div>
+
+  <div class="body">
+
+    <div id="not-meet-msg" class="not-meet" style="display:none">
+      Open a Google Meet call first, then use the floating widget that appears on the page.
+    </div>
+
+    <div class="status-card">
+      <div class="status-row">
+        <span id="dot" class="dot-idle"></span>
+        <span id="status-label" class="status-label">Idle</span>
+      </div>
+      <div id="chunks-line" class="chunks-line">No transcription yet</div>
+    </div>
+
+    <button id="btn-start"    class="btn btn-primary"   >▶ Start Recording</button>
+    <button id="btn-stop"     class="btn btn-secondary" style="display:none">⏸ Pause</button>
+    <button id="btn-finalise" class="btn btn-accent"    style="display:none">✓ End &amp; Summarise</button>
+
+    <a href="http://localhost:5000" target="_blank" class="footer-link">
+      Open Convoq ↗
+    </a>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

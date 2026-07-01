@@ -1,32 +1,32 @@
-<div align="center">
+﻿<div align="center">
 
-# CorpMeet-AI 🤖
+# Convoq 🤖
 
-### *AI-Powered Corporate Meeting Minutes & Action Tracker*
+### *Convoq - AI-Powered Meeting Minutes & Action Tracker*
 
 **Transform your meeting transcripts into actionable insights with cutting-edge AI technology**
 
-[![GitHub Stars](https://img.shields.io/github/stars/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&logo=github&color=ffd700)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&logo=github&color=blue)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/network)
-[![License](https://img.shields.io/github/license/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=green)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&logo=github&color=ffd700)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&logo=github&color=blue)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/network)
+[![License](https://img.shields.io/github/license/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=green)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 
-[![Contributors](https://img.shields.io/github/contributors/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=orange)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)
-[![Issues](https://img.shields.io/github/issues/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=red)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=purple)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/pulls)
-[![Last Commit](https://img.shields.io/github/last-commit/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=brightgreen)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/commits)
+[![Contributors](https://img.shields.io/github/contributors/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=orange)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=red)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=purple)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/pulls)
+[![Last Commit](https://img.shields.io/github/last-commit/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker?style=for-the-badge&color=brightgreen)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/commits)
 
-![CorpMeet-AI Demo](https://via.placeholder.com/800x400/1e40af/ffffff?text=CorpMeet-AI+Live+Demo)
+![Convoq Demo](https://via.placeholder.com/800x400/1e40af/ffffff?text=Convoq+Live+Demo)
 
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Try%20Now-brightgreen?style=for-the-badge)](https://corpmeet-ai.demo.com)
-[![Documentation](https://img.shields.io/badge/📚%20Documentation-Read%20Docs-blue?style=for-the-badge)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
-[![API Reference](https://img.shields.io/badge/📖%20API-Reference-orange?style=for-the-badge)](https://api.corpmeet-ai.com/docs)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Try%20Now-brightgreen?style=for-the-badge)](https://Convoq.demo.com)
+[![Documentation](https://img.shields.io/badge/📚%20Documentation-Read%20Docs-blue?style=for-the-badge)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
+[![API Reference](https://img.shields.io/badge/📖%20API-Reference-orange?style=for-the-badge)](https://api.Convoq.com/docs)
 
 </div>
 
 ---
 
-## 🌟 Why CorpMeet-AI?
+## 🌟 Why Convoq?
 
 <div align="center">
 
@@ -63,7 +63,7 @@
 
 ### 📊 **Impact Metrics**
 
-| Metric | Before CorpMeet-AI | After CorpMeet-AI | Improvement |
+| Metric | Before Convoq | After Convoq | Improvement |
 |--------|-------------------|--------------------|-------------|
 | ⏱️ **Processing Time** | 30+ minutes | 2 minutes | **93% faster** |
 | 🎯 **Action Item Tracking** | 60% missed | 95% captured | **58% better** |
@@ -209,7 +209,7 @@ graph TB
 ### ⚡ **One-Line Installation**
 
 ```bash
-git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git && cd AI-Powered-Corporate-Meeting-Minutes-Action-Tracker && pip install -r requirements.txt && python app.py
+git clone https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git && cd AI-Powered-Corporate-Meeting-Minutes-Action-Tracker && pip install -r requirements.txt && python app.py
 ```
 
 ### 📋 **Step-by-Step Setup**
@@ -222,7 +222,7 @@ git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Acti
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
+   git clone https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
    cd AI-Powered-Corporate-Meeting-Minutes-Action-Tracker
    ```
 
@@ -250,7 +250,7 @@ git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Acti
 
 ### 🎉 **That's it! You're ready to process meeting transcripts!**
 
-[![Start Using](https://img.shields.io/badge/🚀%20Start%20Using-CorpMeet--AI-success?style=for-the-badge)](http://localhost:5000)
+[![Start Using](https://img.shields.io/badge/🚀%20Start%20Using-convoq--AI-success?style=for-the-badge)](http://localhost:5000)
 
 </div>
 
@@ -292,7 +292,7 @@ SECRET_KEY=your_secret_key_for_production
 ## 🏗️ Project Structure
 
 ```
-CorpMeet-AI/
+Convoq/
 ├── app.py                  # Main Flask application
 ├── models.py              # Database models (SQLAlchemy)
 ├── ai_processor.py        # AI processing logic
@@ -447,11 +447,11 @@ Decisions:
 
 ### 🤝 **Join Our Amazing Community!**
 
-[![Contributors](https://contrib.rocks/image?repo=Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)
 
 [![Contribute](https://img.shields.io/badge/🤝%20Contribute-Welcome-brightgreen?style=for-the-badge)](CONTRIBUTING.md)
-[![Good First Issues](https://img.shields.io/github/issues/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/good%20first%20issue?style=for-the-badge&color=blue&label=🎯%20Good%20First%20Issues)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-[![Discord](https://img.shields.io/badge/💬%20Join-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/corpmeet-ai)
+[![Good First Issues](https://img.shields.io/github/issues/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/good%20first%20issue?style=for-the-badge&color=blue&label=🎯%20Good%20First%20Issues)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Discord](https://img.shields.io/badge/💬%20Join-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Convoq)
 
 </div>
 
@@ -464,7 +464,7 @@ We welcome contributions from developers of all skill levels! Here's how you can
 ### 🐛 **Report Bugs**
 Found an issue? Let us know!
 
-[![Report Bug](https://img.shields.io/badge/Report-Bug-red?style=for-the-badge&logo=github)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=bug_report.md)
+[![Report Bug](https://img.shields.io/badge/Report-Bug-red?style=for-the-badge&logo=github)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=bug_report.md)
 
 </td>
 <td width="33%" align="center">
@@ -472,7 +472,7 @@ Found an issue? Let us know!
 ### 💡 **Request Features**
 Have a great idea? Share it!
 
-[![Feature Request](https://img.shields.io/badge/Request-Feature-blue?style=for-the-badge&logo=lightbulb)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=feature_request.md)
+[![Feature Request](https://img.shields.io/badge/Request-Feature-blue?style=for-the-badge&logo=lightbulb)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=feature_request.md)
 
 </td>
 <td width="33%" align="center">
@@ -480,7 +480,7 @@ Have a great idea? Share it!
 ### 🔧 **Submit Code**
 Ready to contribute code?
 
-[![Pull Request](https://img.shields.io/badge/Submit-PR-green?style=for-the-badge&logo=git)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/pulls)
+[![Pull Request](https://img.shields.io/badge/Submit-PR-green?style=for-the-badge&logo=git)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/pulls)
 
 </td>
 </tr>
@@ -499,11 +499,11 @@ Ready to contribute code?
 
 <div align="center">
 
-### 🙏 **Support CorpMeet-AI Development**
+### 🙏 **Support Convoq Development**
 
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/Jani-shiv?style=for-the-badge&logo=github-sponsors&color=EA4AAA)](https://github.com/sponsors/Jani-shiv)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/corpmeetai)
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/CorpMeetAI)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/Aditya001-max?style=for-the-badge&logo=github-sponsors&color=EA4AAA)](https://github.com/sponsors/Aditya001-max)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/Convoq)
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/Convoq)
 
 </div>
 
@@ -521,13 +521,13 @@ Ready to contribute code?
 *Join our growing community!*
 
 #### 🥉 Bronze Supporters
-<a href="https://github.com/sponsors/Jani-shiv">
+<a href="https://github.com/sponsors/Aditya001-max">
   <img src="https://img.shields.io/badge/25%2B-Bronze%20Supporters-CD7F32?style=for-the-badge&logo=users" alt="Bronze Supporters" />
 </a>
 
 </div>
 
-**[View Sponsorship Details](SPONSORS.md)** | **[Become a Sponsor](https://github.com/sponsors/Jani-shiv)**
+**[View Sponsorship Details](SPONSORS.md)** | **[Become a Sponsor](https://github.com/sponsors/Aditya001-max)**
 
 ---
 
@@ -537,15 +537,15 @@ Ready to contribute code?
 
 ### 📈 **Growth & Activity**
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Jani-shiv&repo=AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&show_icons=true&theme=tokyonight)
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Aditya001-max&repo=AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&show_icons=true&theme=tokyonight)
 
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Jani-shiv&repo=AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&theme=react-dark)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/commit-activity)
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Aditya001-max&repo=AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&theme=react-dark)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/commit-activity)
 
 ### 🌍 **Community**
 
-[![Stargazers](https://reporoster.com/stars/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/stargazers)
+[![Stargazers](https://reporoster.com/stars/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/stargazers)
 
-[![Forkers](https://reporoster.com/forks/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/network/members)
+[![Forkers](https://reporoster.com/forks/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/network/members)
 
 </div>
 
@@ -600,15 +600,15 @@ Ready to contribute code?
 
 ### 💬 **Get Help & Stay Connected**
 
-[![Documentation](https://img.shields.io/badge/📚%20Read-Documentation-blue?style=for-the-badge)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
-[![Issues](https://img.shields.io/badge/🐛%20Report-Issues-red?style=for-the-badge)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
-[![Discussions](https://img.shields.io/badge/💡%20Join-Discussions-yellow?style=for-the-badge)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
+[![Documentation](https://img.shields.io/badge/📚%20Read-Documentation-blue?style=for-the-badge)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
+[![Issues](https://img.shields.io/badge/🐛%20Report-Issues-red?style=for-the-badge)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
+[![Discussions](https://img.shields.io/badge/💡%20Join-Discussions-yellow?style=for-the-badge)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
 
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/CorpMeetAI)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/corpmeetai)
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/corpmeet-ai)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Convoq)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/Convoq)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Convoq)
 
-**Email**: [hello@corpmeet-ai.com](mailto:hello@corpmeet-ai.com)
+**Email**: [hello@Convoq.com](mailto:hello@Convoq.com)
 
 </div>
 
@@ -634,22 +634,22 @@ Ready to contribute code?
 
 ### 🌟 **Star History**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&type=Timeline)](https://star-history.com/#Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&type=Timeline)](https://star-history.com/#Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&Timeline)
 
 ### 💝 **Show Your Support**
 
-**If CorpMeet-AI helps your team, please consider:**
+**If Convoq helps your team, please consider:**
 
-[![Star this repo](https://img.shields.io/badge/⭐%20Star-this%20repo-yellow?style=for-the-badge&logo=github)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
-[![Fork this repo](https://img.shields.io/badge/🍴%20Fork-this%20repo-blue?style=for-the-badge&logo=github)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/fork)
-[![Share on Twitter](https://img.shields.io/badge/📱%20Share-on%20Twitter-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/intent/tweet?text=Check%20out%20CorpMeet-AI%20-%20AI-powered%20meeting%20minutes%20tracker!&url=https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
+[![Star this repo](https://img.shields.io/badge/⭐%20Star-this%20repo-yellow?style=for-the-badge&logo=github)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
+[![Fork this repo](https://img.shields.io/badge/🍴%20Fork-this%20repo-blue?style=for-the-badge&logo=github)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/fork)
+[![Share on Twitter](https://img.shields.io/badge/📱%20Share-on%20Twitter-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/intent/tweet?text=Check%20out%20Convoq%20-%20AI-powered%20meeting%20minutes%20tracker!&url=https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
 
 ---
 
 **Built with ❤️ for better meeting management**
 
-*Made by [Jani-shiv](https://github.com/Jani-shiv) and [contributors](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)*
+*Made by [Aditya001-max](https://github.com/Aditya001-max) and [contributors](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/graphs/contributors)*
 
-**🚀 Ready to transform your meetings? [Get started now!](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker#-quick-start)**
+**🚀 Ready to transform your meetings? [Get started now!](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker#-quick-start)**
 
 </div>

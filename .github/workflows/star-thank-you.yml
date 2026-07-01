@@ -1,4 +1,4 @@
-name: 🌟 Auto-Star Thank You
+﻿name: 🌟 Auto-Star Thank You
 
 on:
   watch:
@@ -26,11 +26,11 @@ jobs:
           const starCount = '${{ steps.stargazer.outputs.star_count }}';
           
           const issueBody = `
-          ## 🌟 Thank You for Starring CorpMeet-AI!
+          ## 🌟 Thank You for Starring Convoq!
           
           Hey @${username}! 👋
           
-          Thank you so much for starring CorpMeet-AI! ⭐ You're our **${starCount}${getOrdinalSuffix(starCount)}** star! 🎉
+          Thank you so much for starring Convoq! ⭐ You're our **${starCount}${getOrdinalSuffix(starCount)}** star! 🎉
           
           ### 🎁 As a token of our appreciation:
           
@@ -41,19 +41,19 @@ jobs:
           ### 🚀 What's Next?
           
           - 🔔 **Watch** this repository to get notified of releases
-          - 🤝 **Contribute** by checking out our [Good First Issues](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-          - 💬 **Join** our [Discord community](https://discord.gg/corpmeet-ai) for real-time discussions
-          - 📢 **Share** CorpMeet-AI with your network
+          - 🤝 **Contribute** by checking out our [Good First Issues](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+          - 💬 **Join** our [Discord community](https://discord.gg/Convoq) for real-time discussions
+          - 📢 **Share** Convoq with your network
           
           ### 💎 Consider Sponsorship
           
-          If CorpMeet-AI helps your team save time, consider [sponsoring us](https://github.com/sponsors/Jani-shiv) to help accelerate development!
+          If Convoq helps your team save time, consider [sponsoring us](https://github.com/sponsors/Aditya001-max) to help accelerate development!
           
           ---
           
           **Thanks again for your support!** 🙏
           
-          *The CorpMeet-AI Team* 💙
+          *The Convoq Team* 💙
           `;
           
           function getOrdinalSuffix(n) {
@@ -65,7 +65,7 @@ jobs:
           await github.rest.issues.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            title: `🌟 Thank you @${username} for starring CorpMeet-AI!`,
+            title: `🌟 Thank you @${username} for starring Convoq!`,
             body: issueBody,
             labels: ['thank-you', 'community']
           });
@@ -89,7 +89,7 @@ jobs:
             
             We've just reached **${starCount} stars**! 🚀
             
-            This is an incredible milestone for CorpMeet-AI and we couldn't have done it without our amazing community! 
+            This is an incredible milestone for Convoq and we couldn't have done it without our amazing community! 
             
             ### 🎁 Milestone Celebration
             
@@ -107,7 +107,7 @@ jobs:
             - 🌍 Expanded platform support
             - 💼 Enterprise features
             
-            **Thank you to everyone who believed in CorpMeet-AI!** 💙
+            **Thank you to everyone who believed in Convoq!** 💙
             
             ---
             

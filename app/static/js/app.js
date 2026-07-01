@@ -1,6 +1,6 @@
-/**
- * CorpMeet-AI v2.0 - Main JavaScript
- * Author: AI-Powered Corporate Meeting Minutes Tracker
+﻿/**
+ * Convoq v2.0 - Main JavaScript
+ * Author: Aditya Raj Kaushik
  * License: MIT
  */
 

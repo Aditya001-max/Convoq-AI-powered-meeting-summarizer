@@ -1,6 +1,6 @@
-# 🏆 CorpMeet-AI Wiki
+﻿# 🏆 Convoq Wiki
 
-Welcome to the comprehensive documentation for **CorpMeet-AI** - Your AI-Powered Corporate Meeting Minutes & Action Tracker!
+Welcome to the comprehensive documentation for **Convoq** - Your Convoq - AI-Powered Meeting Minutes & Action Tracker!
 
 ## 📋 Quick Navigation
 
@@ -72,9 +72,9 @@ Welcome to the comprehensive documentation for **CorpMeet-AI** - Your AI-Powered
 
 ---
 
-## 🤖 What is CorpMeet-AI?
+## 🤖 What is Convoq?
 
-CorpMeet-AI transforms your meeting recordings into actionable insights through advanced AI processing. Whether you're managing corporate meetings, team standups, or client calls, our platform provides:
+Convoq transforms your meeting recordings into actionable insights through advanced AI processing. Whether you're managing corporate meetings, team standups, or client calls, our platform provides:
 
 - **🎯 Smart Action Item Extraction** - Automatically identifies and categorizes action items
 - **📊 Intelligent Meeting Summaries** - Generates concise, professional meeting summaries
@@ -89,7 +89,7 @@ CorpMeet-AI transforms your meeting recordings into actionable insights through 
 
 | 🎯 Goal | 📖 Guide | ⏱️ Time |
 |---------|----------|----------|
-| Install CorpMeet-AI | [Installation Guide](Installation-Guide) | 5 min |
+| Install Convoq | [Installation Guide](Installation-Guide) | 5 min |
 | Process First Meeting | [Quick Start](Quick-Start) | 10 min |
 | Customize Interface | [Theme Guide](Theme-Customization) | 15 min |
 | Set Up API | [API Reference](API-Reference) | 20 min |
@@ -99,19 +99,19 @@ CorpMeet-AI transforms your meeting recordings into actionable insights through 
 
 ## 💬 Need Help?
 
-- 🐛 **Found a bug?** [Report it here](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=bug_report.md)
-- 💡 **Have an idea?** [Suggest a feature](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=feature_request.md)
-- 🤝 **Want to contribute?** [Contributing Guidelines](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/blob/main/CONTRIBUTING.md)
-- 💬 **General questions?** [Discussions](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
+- 🐛 **Found a bug?** [Report it here](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=bug_report.md)
+- 💡 **Have an idea?** [Suggest a feature](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues/new?template=feature_request.md)
+- 🤝 **Want to contribute?** [Contributing Guidelines](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/blob/main/CONTRIBUTING.md)
+- 💬 **General questions?** [Discussions](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
 
 ---
 
 ## 🏆 Community Recognition
 
-Thank you to all our contributors and supporters who make CorpMeet-AI better every day!
+Thank you to all our contributors and supporters who make Convoq better every day!
 
 ### 🌟 Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&type=Date)](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
+[![Star History Chart](https://api.star-history.com/svg?repos=Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker&type=Date)](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker)
 
 ### 📊 Project Stats
 - **Active Contributors**: Growing community

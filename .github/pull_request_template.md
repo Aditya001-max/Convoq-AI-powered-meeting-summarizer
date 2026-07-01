@@ -1,4 +1,4 @@
-## 📋 Pull Request Summary
+﻿## 📋 Pull Request Summary
 
 **Brief description of the changes made in this PR.**
 
@@ -191,6 +191,6 @@
 
 ---
 
-**Thank you for contributing to CorpMeet-AI! 🎉**
+**Thank you for contributing to Convoq! 🎉**
 
 *Please ensure all checkboxes are completed before requesting a review.*

@@ -1,9 +1,9 @@
----
+﻿---
 name: 🐛 Bug Report
-about: Create a report to help us improve CorpMeet-AI
+about: Create a report to help us improve Convoq
 title: '[BUG] '
 labels: ['bug', 'needs-triage']
-assignees: ['Jani-shiv']
+assignees: ['Aditya001-max']
 
 ---
 
@@ -39,7 +39,7 @@ assignees: ['Jani-shiv']
 - **OS**: [e.g. Windows 10, macOS 12.0, Ubuntu 20.04]
 - **Python Version**: [e.g. 3.9.7]
 - **Browser**: [e.g. Chrome 95, Firefox 94, Safari 15]
-- **CorpMeet-AI Version**: [e.g. 1.0.0]
+- **Convoq Version**: [e.g. 1.0.0]
 - **AI Provider**: [e.g. OpenAI, Mock AI]
 
 ## 📋 Additional Context
@@ -64,4 +64,4 @@ assignees: ['Jani-shiv']
 
 ---
 
-**Thank you for helping us improve CorpMeet-AI! 🙏**
+**Thank you for helping us improve Convoq! 🙏**

@@ -1,8 +1,8 @@
-# Security Policy
+﻿# Security Policy
 
 ## 🛡️ Supported Versions
 
-We actively support and provide security updates for the following versions of CorpMeet-AI:
+We actively support and provide security updates for the following versions of Convoq:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -13,7 +13,7 @@ We actively support and provide security updates for the following versions of C
 
 ## 🚨 Reporting a Vulnerability
 
-We take security seriously. If you discover a security vulnerability in CorpMeet-AI, please report it responsibly.
+We take security seriously. If you discover a security vulnerability in Convoq, please report it responsibly.
 
 ### 📧 Reporting Process
 
@@ -21,7 +21,7 @@ We take security seriously. If you discover a security vulnerability in CorpMeet
 
 Instead, please:
 
-1. **📧 Email us directly**: [security@corpmeeting.ai](mailto:security@corpmeeting.ai)
+1. **📧 Email us directly**: [security@convoq.ai](mailto:security@convoq.ai)
 2. **🔒 Use GPG encryption** (optional but recommended)
 3. **⏰ Expect acknowledgment** within 24 hours
 4. **🤝 Coordinate disclosure** timeline with our team
@@ -70,7 +70,7 @@ Please provide the following information in your security report:
 - Python Version: X.X.X
 - Operating System: [Windows/Linux/macOS]
 - Browser: [If web-related]
-- CorpMeet-AI Version: X.X.X
+- Convoq Version: X.X.X
 ```
 
 ## 🕒 Response Timeline
@@ -196,7 +196,7 @@ We regularly perform:
 ## 📞 Contact Information
 
 ### 🛡️ Security Team
-- **Primary Contact**: [security@corpmeeting.ai](mailto:security@corpmeeting.ai)
+- **Primary Contact**: [security@convoq.ai](mailto:security@convoq.ai)
 - **PGP Key**: [Available on request]
 - **Response Time**: Within 24 hours for critical issues
 
@@ -230,6 +230,6 @@ We commit to:
 
 ---
 
-**🛡️ Security is a team effort. Thank you for helping keep CorpMeet-AI secure!**
+**🛡️ Security is a team effort. Thank you for helping keep Convoq secure!**
 
 *Last updated: $(date)*

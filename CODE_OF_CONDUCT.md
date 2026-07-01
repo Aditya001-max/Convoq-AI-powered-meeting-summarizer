@@ -1,4 +1,4 @@
-# 🎯 Code of Conduct
+﻿# 🎯 Code of Conduct
 
 ## 🌟 Our Pledge
 
@@ -45,8 +45,8 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at:
 
-- **📧 Primary Contact**: [conduct@corpmeeting.ai](mailto:conduct@corpmeeting.ai)
-- **📧 Secondary Contact**: [Jani-shiv](mailto:jani.shiv@example.com)
+- **📧 Primary Contact**: [conduct@convoq.ai](mailto:conduct@convoq.ai)
+- **📧 Secondary Contact**: [Aditya001-max](mailto:aditya.kaushik@yallo.co)
 - **📞 Anonymous Reporting**: [Use this form](https://forms.gle/anonymous-reporting-form)
 
 All complaints will be reviewed and investigated promptly and fairly.
@@ -146,16 +146,16 @@ We actively encourage participation from:
 ## 📚 Resources
 
 ### 🆘 Getting Help
-- **📖 Documentation**: [Project Wiki](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
-- **🐛 Bug Reports**: [Issue Tracker](https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
-- **📧 Direct Contact**: [Email Support](mailto:support@corpmeeting.ai)
+- **📖 Documentation**: [Project Wiki](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/wiki)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions)
+- **🐛 Bug Reports**: [Issue Tracker](https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/issues)
+- **📧 Direct Contact**: [Email Support](mailto:support@convoq.ai)
 
 ### 🌐 Community Spaces
 - **💻 GitHub Repository**: Primary development platform
-- **📱 Discord Server**: [Join our community](https://discord.gg/corpmeeting-ai) (coming soon)
-- **🐦 Twitter**: [@CorpMeetingAI](https://twitter.com/CorpMeetingAI) (coming soon)
-- **📧 Newsletter**: [Subscribe for updates](https://newsletter.corpmeeting.ai) (coming soon)
+- **📱 Discord Server**: [Join our community](https://discord.gg/convoq-ai) (coming soon)
+- **🐦 Twitter**: [@convoqAI](https://twitter.com/convoqAI) (coming soon)
+- **📧 Newsletter**: [Subscribe for updates](https://newsletter.convoq.ai) (coming soon)
 
 ## 🙏 Attribution
 

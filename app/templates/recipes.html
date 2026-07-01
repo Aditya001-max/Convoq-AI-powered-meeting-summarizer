@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}Recipes — Convoq{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in flex-wrap gap-3">
+  <div>
+    <h1 class="h2 fw-bold text-gradient mb-1"><i class="bi bi-stars me-2"></i>AI Recipes</h1>
+    <p class="text-muted mb-0">Reusable AI prompts — run any recipe against any meeting in one click.</p>
+  </div>
+  <button class="btn btn-primary-glow rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#newRecipeModal">
+    <i class="bi bi-plus-lg me-1"></i>New Recipe
+  </button>
+</div>
+
+{% if not recipes %}
+<div class="text-center py-5 glass-card">
+  <i class="bi bi-stars text-muted" style="font-size:5rem"></i>
+  <h3 class="text-muted mt-3">No recipes yet</h3>
+  <p class="text-muted">Create your first custom AI recipe.</p>
+</div>
+{% else %}
+
+<!-- Built-in recipes -->
+{% set builtins = recipes | selectattr('is_builtin') | list %}
+{% set custom = recipes | rejectattr('is_builtin') | list %}
+
+{% if builtins %}
+<h6 class="text-uppercase text-muted small fw-bold mb-3" style="letter-spacing:.08em">Built-in Recipes</h6>
+<div class="row g-3 mb-4">
+  {% for recipe in builtins %}
+  <div class="col-lg-6 col-xl-4 animate-fade-in">
+    <div class="glass-card p-4 h-100 d-flex flex-column">
+      <div class="d-flex align-items-start gap-3 mb-3">
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+             style="width:42px;height:42px;background:rgba(99,102,241,.15)">
+          <i class="bi {{ recipe.icon }} text-primary"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-1">{{ recipe.name }}</h6>
+          <p class="text-muted small mb-0">{{ recipe.description }}</p>
+        </div>
+      </div>
+      <div class="mt-auto pt-3 border-top border-secondary d-flex gap-2">
+        <button class="btn btn-sm btn-outline-primary rounded-pill flex-grow-1 run-recipe-btn"
+                data-recipe-id="{{ recipe.id }}" data-recipe-name="{{ recipe.name }}">
+          <i class="bi bi-play-fill me-1"></i>Run on a Meeting
+        </button>
+        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                data-bs-toggle="tooltip" title="{{ recipe.prompt_template[:120] }}…">
+          <i class="bi bi-info-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if custom %}
+<h6 class="text-uppercase text-muted small fw-bold mb-3 mt-4" style="letter-spacing:.08em">Your Custom Recipes</h6>
+<div class="row g-3 mb-4">
+  {% for recipe in custom %}
+  <div class="col-lg-6 col-xl-4 animate-fade-in">
+    <div class="glass-card p-4 h-100 d-flex flex-column">
+      <div class="d-flex align-items-start gap-3 mb-3">
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+             style="width:42px;height:42px;background:rgba(34,197,94,.1)">
+          <i class="bi {{ recipe.icon }} text-success"></i>
+        </div>
+        <div class="flex-grow-1">
+          <h6 class="fw-bold mb-1">{{ recipe.name }}</h6>
+          <p class="text-muted small mb-0">{{ recipe.description or 'Custom recipe' }}</p>
+        </div>
+        <button class="btn btn-sm btn-outline-danger rounded-pill delete-recipe-btn flex-shrink-0"
+                data-recipe-id="{{ recipe.id }}" data-recipe-name="{{ recipe.name }}">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+      <div class="mt-auto pt-3 border-top border-secondary">
+        <button class="btn btn-sm btn-outline-success rounded-pill w-100 run-recipe-btn"
+                data-recipe-id="{{ recipe.id }}" data-recipe-name="{{ recipe.name }}">
+          <i class="bi bi-play-fill me-1"></i>Run on a Meeting
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endif %}
+
+<!-- Run Recipe modal -->
+<div class="modal fade" id="runModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold" id="runModalTitle"><i class="bi bi-stars text-primary me-2"></i>Run Recipe</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label text-muted small">Select a meeting to run this recipe against</label>
+        <select class="form-select bg-dark text-light border-secondary mb-3" id="meetingSelect">
+          <option value="">Loading meetings…</option>
+        </select>
+        <div id="recipeResult" class="d-none">
+          <hr class="border-secondary">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold mb-0 text-primary" id="resultTitle"></h6>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="copyResult()">
+              <i class="bi bi-clipboard me-1"></i>Copy
+            </button>
+          </div>
+          <pre id="resultBody" class="text-light small" style="max-height:340px;overflow-y:auto"></pre>
+        </div>
+        <div id="recipeSpinner" class="text-center py-4 d-none">
+          <div class="spinner-border text-primary"></div>
+          <p class="text-muted small mt-2">AI is running the recipe…</p>
+        </div>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-glow rounded-pill px-4" id="runNowBtn">
+          <i class="bi bi-play-fill me-1"></i>Run Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Recipe modal -->
+<div class="modal fade" id="newRecipeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle text-success me-2"></i>Create New Recipe</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label text-muted small">Recipe Name</label>
+          <input type="text" id="newName" class="form-control bg-transparent text-light border-secondary" placeholder="e.g. Budget Extraction">
+        </div>
+        <div class="mb-3">
+          <label class="form-label text-muted small">Description</label>
+          <input type="text" id="newDesc" class="form-control bg-transparent text-light border-secondary" placeholder="Brief description of what this recipe does">
+        </div>
+        <div class="mb-3">
+          <label class="form-label text-muted small">AI Prompt Template</label>
+          <textarea id="newPrompt" class="form-control bg-transparent text-light border-secondary" rows="5"
+                    placeholder="Write your prompt here. The meeting transcript will be appended automatically.&#10;&#10;Example: Extract all budget figures, cost estimates, and financial commitments mentioned in this meeting. Format as a table with: item, amount, person responsible."></textarea>
+          <small class="text-muted">The full meeting transcript is automatically appended to your prompt when the recipe runs.</small>
+        </div>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success rounded-pill px-4" id="saveRecipeBtn">
+          <i class="bi bi-floppy me-1"></i>Save Recipe
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let selectedRecipeId = null;
+
+// Load meetings into select on modal open
+async function loadMeetings() {
+  const sel = document.getElementById('meetingSelect');
+  sel.innerHTML = '<option value="">Loading…</option>';
+  try {
+    const resp = await fetch('/api/meetings');
+    const meetings = await resp.json();
+    sel.innerHTML = meetings.length
+      ? meetings.map(m => `<option value="${m.id}">${m.title} (${m.date.slice(0,10)})</option>`).join('')
+      : '<option value="">No meetings yet</option>';
+  } catch(e) { sel.innerHTML = '<option value="">Error loading</option>'; }
+}
+
+document.querySelectorAll('.run-recipe-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    selectedRecipeId = btn.dataset.recipeId;
+    document.getElementById('runModalTitle').innerHTML =
+      `<i class="bi bi-stars text-primary me-2"></i>${btn.dataset.recipeName}`;
+    document.getElementById('recipeResult').classList.add('d-none');
+    loadMeetings();
+    new bootstrap.Modal(document.getElementById('runModal')).show();
+  });
+});
+
+document.getElementById('runNowBtn')?.addEventListener('click', async () => {
+  const meetingId = document.getElementById('meetingSelect').value;
+  if (!meetingId) { alert('Please select a meeting first.'); return; }
+
+  const spinner = document.getElementById('recipeSpinner');
+  const result  = document.getElementById('recipeResult');
+  spinner.classList.remove('d-none');
+  result.classList.add('d-none');
+
+  try {
+    const resp = await fetch(`/api/recipes/${selectedRecipeId}/run`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ meeting_id: parseInt(meetingId) })
+    });
+    const data = await resp.json();
+    document.getElementById('resultTitle').textContent = data.recipe_name || 'Result';
+    document.getElementById('resultBody').textContent = data.result || '(No output)';
+    result.classList.remove('d-none');
+  } catch(e) {
+    alert('Error running recipe: ' + e);
+  } finally {
+    spinner.classList.add('d-none');
+  }
+});
+
+function copyResult() {
+  const text = document.getElementById('resultBody').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target.closest('button');
+    btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy', 2000);
+  });
+}
+
+document.getElementById('saveRecipeBtn')?.addEventListener('click', async () => {
+  const name   = document.getElementById('newName').value.trim();
+  const desc   = document.getElementById('newDesc').value.trim();
+  const prompt = document.getElementById('newPrompt').value.trim();
+  if (!name || !prompt) { alert('Name and prompt are required.'); return; }
+
+  try {
+    const resp = await fetch('/api/recipes', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name, description: desc, prompt_template: prompt })
+    });
+    if (resp.ok) { location.reload(); }
+  } catch(e) { alert('Error saving recipe.'); }
+});
+
+document.querySelectorAll('.delete-recipe-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    if (!confirm(`Delete recipe "${btn.dataset.recipeName}"?`)) return;
+    const resp = await fetch(`/api/recipes/${btn.dataset.recipeId}`, { method: 'DELETE' });
+    if (resp.ok) location.reload();
+  });
+});
+
+// Init tooltips
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el =>
+  new bootstrap.Tooltip(el, { trigger:'hover' })
+);
+</script>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}People — Convoq{% endblock %}
+
+{% block content %}
+<div class="mb-4 animate-fade-in">
+  <h1 class="h2 fw-bold text-gradient mb-1"><i class="bi bi-people me-2"></i>People &amp; Accountability</h1>
+  <p class="text-muted">Per-person action item ownership across all meetings</p>
+</div>
+
+{% if not people_list %}
+<div class="text-center py-5 glass-card">
+  <i class="bi bi-people text-muted" style="font-size:5rem"></i>
+  <h3 class="text-muted mt-3">No action items yet</h3>
+  <a href="{{ url_for('main.upload_page') }}" class="btn btn-primary mt-2">Process a Meeting</a>
+</div>
+{% else %}
+
+<div class="row g-4">
+  {% for person in people_list %}
+  <div class="col-lg-6 animate-fade-in">
+    <div class="glass-card p-4 h-100">
+      <!-- Person header -->
+      <div class="d-flex align-items-center mb-3">
+        <div class="rounded-circle bg-primary bg-opacity-20 d-flex align-items-center justify-content-center fw-bold fs-4 me-3 flex-shrink-0"
+             style="width:48px;height:48px;color:#6366f1">
+          {{ person.name[0].upper() }}
+        </div>
+        <div class="flex-grow-1">
+          <h5 class="mb-0 fw-bold">{{ person.name }}</h5>
+          <small class="text-muted">{{ person.total }} action items total</small>
+        </div>
+        {% if person.overdue > 0 %}
+        <span class="badge bg-danger rounded-pill">{{ person.overdue }} overdue</span>
+        {% elif person.rate == 100 and person.total > 0 %}
+        <span class="badge bg-success rounded-pill"><i class="bi bi-trophy me-1"></i>All done</span>
+        {% endif %}
+      </div>
+
+      <!-- Completion bar -->
+      <div class="mb-3">
+        <div class="d-flex justify-content-between small mb-1">
+          <span class="text-muted">Completion rate</span>
+          <span class="fw-bold {{ 'text-success' if person.rate >= 70 else 'text-warning' if person.rate >= 40 else 'text-danger' }}">{{ person.rate }}%</span>
+        </div>
+        <div class="progress" style="height:6px">
+          <div class="progress-bar {{ 'bg-success' if person.rate >= 70 else 'bg-warning' if person.rate >= 40 else 'bg-danger' }}"
+               style="width:{{ person.rate }}%"></div>
+        </div>
+      </div>
+
+      <!-- Status counts -->
+      <div class="row g-2 mb-3 text-center small">
+        <div class="col-3">
+          <div class="fw-bold text-warning">{{ person.open }}</div>
+          <div class="text-muted">Open</div>
+        </div>
+        <div class="col-3">
+          <div class="fw-bold text-info">{{ person.in_progress }}</div>
+          <div class="text-muted">In Progress</div>
+        </div>
+        <div class="col-3">
+          <div class="fw-bold text-danger">{{ person.blocked }}</div>
+          <div class="text-muted">Blocked</div>
+        </div>
+        <div class="col-3">
+          <div class="fw-bold text-success">{{ person.done }}</div>
+          <div class="text-muted">Done</div>
+        </div>
+      </div>
+
+      <!-- Item list (collapsed by default if many) -->
+      <div id="items-{{ loop.index }}" class="{{ 'collapse' if person.items|length > 4 }}">
+        <ul class="list-unstyled mb-0">
+          {% for item in person.items %}
+          <li class="mb-2 p-2 rounded d-flex justify-content-between align-items-start gap-2"
+              style="background:rgba(255,255,255,.04)">
+            <div class="flex-grow-1">
+              <span class="small fw-medium {{ 'text-decoration-line-through opacity-50' if item.status == 'Done' }}">
+                {{ item.task }}
+              </span>
+              <div class="text-muted" style="font-size:.7rem">
+                <a href="{{ url_for('main.view_results', meeting_id=item.meeting_id) }}"
+                   class="text-muted text-decoration-none">
+                  <i class="bi bi-journal-text me-1"></i>{{ item.meeting.title }}
+                </a>
+                · <i class="bi bi-clock me-1"></i>{{ item.due_date }}
+              </div>
+            </div>
+            <div class="d-flex flex-column gap-1 align-items-end flex-shrink-0">
+              <span class="badge rounded-pill small {{ 'bg-danger' if item.priority == 'High' else 'bg-warning text-dark' if item.priority == 'Medium' else 'bg-secondary' }}">
+                {{ item.priority }}
+              </span>
+              <span class="badge small {{ 'bg-success' if item.status == 'Done' else 'bg-info' if item.status == 'In Progress' else 'bg-danger' if item.status == 'Blocked' else 'bg-secondary' }}">
+                {{ item.status }}
+              </span>
+              {% if item.is_overdue() %}
+              <span class="badge bg-danger small">Overdue</span>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      {% if person.items|length > 4 %}
+      <button class="btn btn-link btn-sm text-muted mt-2 p-0"
+              data-bs-toggle="collapse" data-bs-target="#items-{{ loop.index }}">
+        <i class="bi bi-chevron-down me-1"></i>Show all {{ person.items|length }} items
+      </button>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
----
+﻿---
 name: ❓ Question & Support
-about: Ask a question or get help with CorpMeet-AI
+about: Ask a question or get help with Convoq
 title: '[QUESTION] '
 labels: ['question', 'help-wanted']
 assignees: []
@@ -24,7 +24,7 @@ assignees: []
 - **OS**: [e.g. Windows 10, macOS 12.0, Ubuntu 20.04]
 - **Python Version**: [e.g. 3.9.7]
 - **Browser**: [e.g. Chrome 95, Firefox 94]
-- **CorpMeet-AI Version**: [e.g. 1.0.0]
+- **Convoq Version**: [e.g. 1.0.0]
 
 ## 📝 Code/Configuration (if applicable)
 

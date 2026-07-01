@@ -1,4 +1,4 @@
-name: 🧪 CI/CD Pipeline
+﻿name: 🧪 CI/CD Pipeline
 
 on:
   push:
@@ -190,13 +190,13 @@ jobs:
         echo "🚀 Deploying to staging environment..."
         # Add your deployment commands here
         # Example: kubectl apply -f k8s/staging/
-        # Example: helm upgrade corpmeet-ai ./helm-chart
+        # Example: helm upgrade Convoq ./helm-chart
 
     - name: 🧪 Health Check
       run: |
         echo "🔍 Running health checks..."
         # Add health check commands here
-        # Example: curl -f https://staging.corpmeet-ai.com/health
+        # Example: curl -f https://staging.Convoq.com/health
 
   performance:
     name: ⚡ Performance Testing
@@ -322,7 +322,7 @@ jobs:
           ## 🚀 Quick Start
 
           ```bash
-          git clone https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
+          git clone https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker.git
           cd AI-Powered-Corporate-Meeting-Minutes-Action-Tracker
           pip install -r requirements.txt
           python app.py
@@ -331,9 +331,9 @@ jobs:
           ## 📦 Docker
 
           ```bash
-          docker run -p 5000:5000 ghcr.io/jani-shiv/ai-powered-corporate-meeting-minutes-action-tracker:${{ steps.tag.outputs.version }}
+          docker run -p 5000:5000 ghcr.io/Aditya001-max/ai-powered-corporate-meeting-minutes-action-tracker:${{ steps.tag.outputs.version }}
           ```
 
-          **Full Changelog**: https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/compare/${{ github.event.before }}...${{ github.sha }}
+          **Full Changelog**: https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/compare/${{ github.event.before }}...${{ github.sha }}
         draft: false
         prerelease: false

@@ -1,14 +1,14 @@
-blank_issues_enabled: false
+﻿blank_issues_enabled: false
 contact_links:
   - name: 💬 GitHub Discussions
-    url: https://github.com/Jani-shiv/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions
+    url: https://github.com/Aditya001-max/AI-Powered-Corporate-Meeting-Minutes-Action-Tracker/discussions
     about: Ask questions, share ideas, and discuss with the community
   - name: 💎 Sponsor This Project
-    url: https://github.com/sponsors/Jani-shiv
-    about: Support CorpMeet-AI development with sponsorship
+    url: https://github.com/sponsors/Aditya001-max
+    about: Support Convoq development with sponsorship
   - name: 📧 Email Support
-    url: mailto:hello@corpmeet-ai.com
+    url: mailto:hello@Convoq.com
     about: Contact us directly for enterprise or partnership inquiries
   - name: 💬 Discord Community
-    url: https://discord.gg/corpmeet-ai
+    url: https://discord.gg/Convoq
     about: Join our Discord server for real-time chat and support

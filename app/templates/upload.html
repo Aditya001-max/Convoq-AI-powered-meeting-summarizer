@@ -1,128 +1,171 @@
 {% extends "base.html" %}
-
-{% block title %}Upload Transcript - CorpMeet-AI{% endblock %}
+{% block title %}New Meeting — Convoq{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center animate-fade-in">
-    <div class="col-lg-8">
-        <div class="glass-card p-5">
-            <div class="text-center mb-5">
-                <div class="mb-3">
-                    <i class="bi bi-cloud-arrow-up display-3 text-primary"></i>
-                </div>
-                <h2 class="fw-bold mb-3">Upload Meeting Transcript</h2>
-                <p class="text-muted">Transform your meetings into actionable insights</p>
-            </div>
+  <div class="col-lg-8">
+    <div class="glass-card p-5">
+      <div class="text-center mb-4">
+        <i class="bi bi-cloud-arrow-up display-3 text-primary"></i>
+        <h2 class="fw-bold mt-2 mb-1">Process a Meeting</h2>
+        <p class="text-muted">Paste a transcript, upload a file, or drop an audio recording</p>
+      </div>
 
-            <form action="{{ url_for('main.process_transcript') }}" method="post" enctype="multipart/form-data" id="transcriptForm">
-                
-                <div class="mb-4">
-                    <label for="meeting_title" class="form-label text-uppercase small text-muted fw-bold">
-                        <i class="bi bi-tag me-1"></i>Meeting Title
-                    </label>
-                    <input type="text" 
-                           class="form-control py-3" 
-                           id="meeting_title" 
-                           name="meeting_title" 
-                           placeholder="e.g., Q3 Strategy Review" 
-                           required>
-                </div>
+      <form action="{{ url_for('main.process_transcript') }}" method="post"
+            enctype="multipart/form-data" id="transcriptForm">
 
-                <!-- Tabs for input method -->
-                <ul class="nav nav-pills mb-4 nav-justified bg-dark rounded p-1" id="uploadTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded fw-medium" id="paste-tab" data-bs-toggle="pill" data-bs-target="#paste" type="button" role="tab">
-                            <i class="bi bi-file-text me-2"></i>Paste Text
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded fw-medium" id="file-tab" data-bs-toggle="pill" data-bs-target="#file" type="button" role="tab">
-                            <i class="bi bi-cloud-arrow-up me-2"></i>Upload File
-                        </button>
-                    </li>
-                </ul>
+        <!-- Title -->
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-uppercase text-muted">
+            <i class="bi bi-tag me-1"></i>Meeting Title
+          </label>
+          <input type="text" class="form-control py-3" name="meeting_title"
+                 placeholder="e.g., Q3 Strategy Review" required>
+        </div>
 
-                <div class="tab-content mb-4" id="uploadTabContent">
-                    <!-- Paste Text Tab -->
-                    <div class="tab-pane fade show active" id="paste" role="tabpanel">
-                        <textarea class="form-control" 
-                                  id="transcript_text" 
-                                  name="transcript_text" 
-                                  rows="12" 
-                                  placeholder="Paste your meeting transcript here...
+        <!-- Meeting Type + Attendees row -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-5">
+            <label class="form-label small fw-bold text-uppercase text-muted">
+              <i class="bi bi-grid me-1"></i>Meeting Type
+            </label>
+            <select class="form-select py-3" name="meeting_type">
+              {% for key, tmpl in meeting_types.items() %}
+              <option value="{{ key }}">{{ tmpl.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-7">
+            <label class="form-label small fw-bold text-uppercase text-muted">
+              <i class="bi bi-people me-1"></i>Attendees <span class="text-muted fw-normal">(comma-separated)</span>
+            </label>
+            <input type="text" class="form-control py-3" name="attendees"
+                   placeholder="Sarah, Mike, John…">
+          </div>
+        </div>
 
-Example format:
-Sarah: Let's discuss the Q3 marketing budget.
+        <!-- Input tabs -->
+        <ul class="nav nav-pills mb-4 nav-justified bg-dark rounded p-1" id="uploadTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded" data-bs-toggle="pill" data-bs-target="#paste" type="button">
+              <i class="bi bi-file-text me-2"></i>Paste Text
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded" data-bs-toggle="pill" data-bs-target="#file" type="button">
+              <i class="bi bi-file-earmark-word me-2"></i>Text / DOCX
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded" data-bs-toggle="pill" data-bs-target="#audio" type="button">
+              <i class="bi bi-mic me-2"></i>Audio File
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content mb-4" id="uploadTabContent">
+
+          <!-- Paste -->
+          <div class="tab-pane fade show active" id="paste" role="tabpanel">
+            <textarea class="form-control" id="transcript_text" name="transcript_text"
+                      rows="12" placeholder="Paste your meeting transcript here…
+
+Example:
+Sarah: Let's discuss the Q3 budget.
 John: I propose we increase digital spend by 20%.
-Sarah: Agreed. Action item: John to prepare budget proposal by Friday.
-Mike: We also need to finalize the vendor contract.
-Sarah: Decision: We'll go with Vendor A based on pricing."></textarea>
-                    </div>
+Sarah: Agreed. Action item: John to prepare the proposal by Friday."></textarea>
+          </div>
 
-                    <!-- Upload File Tab -->
-                    <div class="tab-pane fade" id="file" role="tabpanel">
-                        <div class="upload-zone" id="uploadZone">
-                            <i class="bi bi-cloud-upload display-4 text-primary mb-3"></i>
-                            <h5 class="mb-2">Drag & Drop your file here</h5>
-                            <p class="text-muted small mb-3">or click to browse</p>
-                            <p class="text-muted small mb-0">
-                                <i class="bi bi-info-circle me-1"></i>
-                                Supported: <strong>.txt</strong> and <strong>.docx</strong> (max 16MB)
-                            </p>
-                            <input class="d-none" type="file" id="transcript_file" name="transcript_file" accept=".txt,.docx">
-                        </div>
-                        <div id="file-name-display"></div>
-                    </div>
-                </div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary-glow btn-lg py-3 fw-bold" id="processBtn">
-                        <i class="bi bi-stars me-2"></i>Generate AI Minutes
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Tips Section -->
-        <div class="glass-card p-4 mt-4 animate-fade-in delay-200">
-            <h5 class="mb-3"><i class="bi bi-lightbulb text-warning me-2"></i>Tips for Best Results</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="list-unstyled small text-muted">
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Include speaker names</li>
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Mention action items clearly</li>
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Note decisions made</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <ul class="list-unstyled small text-muted">
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Include deadlines</li>
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Add context when possible</li>
-                        <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Use clear formatting</li>
-                    </ul>
-                </div>
+          <!-- DOCX / TXT -->
+          <div class="tab-pane fade" id="file" role="tabpanel">
+            <div class="upload-zone" id="uploadZone">
+              <i class="bi bi-cloud-upload display-4 text-primary mb-3"></i>
+              <h5 class="mb-1">Drag &amp; Drop your file here</h5>
+              <p class="text-muted small mb-0">Supported: <strong>.txt</strong> and <strong>.docx</strong> (max 16 MB)</p>
+              <input class="d-none" type="file" id="transcript_file" name="transcript_file" accept=".txt,.docx">
             </div>
+            <div id="file-name-display"></div>
+          </div>
+
+          <!-- Audio -->
+          <div class="tab-pane fade" id="audio" role="tabpanel">
+            <div class="upload-zone" id="audioZone">
+              <i class="bi bi-mic-fill display-4 text-warning mb-3"></i>
+              <h5 class="mb-1">Upload Audio / Video Recording</h5>
+              <p class="text-muted small mb-2">Supported: <strong>MP3, MP4, WAV, M4A, WEBM</strong> (max 64 MB)</p>
+              <p class="text-muted small mb-0">
+                <i class="bi bi-info-circle me-1"></i>Transcribed using OpenAI Whisper — requires API key
+              </p>
+              <input class="d-none" type="file" id="audio_file" name="audio_file"
+                     accept=".mp3,.mp4,.wav,.m4a,.webm,.ogg">
+            </div>
+            <div id="audio-name-display"></div>
+          </div>
+
         </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary-glow btn-lg py-3 fw-bold" id="processBtn"
+                  onclick="return prepareSubmit()">
+            <i class="bi bi-stars me-2"></i>Generate AI Minutes
+          </button>
+        </div>
+      </form>
     </div>
+
+    <!-- Tips -->
+    <div class="glass-card p-4 mt-4">
+      <h6 class="mb-3"><i class="bi bi-lightbulb text-warning me-2"></i>Tips for best results</h6>
+      <div class="row small text-muted">
+        <div class="col-md-6">
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Include speaker names before lines</li>
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Mention deadlines explicitly</li>
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Flag decisions clearly</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Select the right meeting type</li>
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Audio files work best under 25 MB</li>
+            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Add attendees for better owner inference</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-// Form validation on submit
-document.getElementById('transcriptForm').addEventListener('submit', function(e) {
-    const text = document.getElementById('transcript_text').value.trim();
-    const file = document.getElementById('transcript_file').files.length;
-    const btn = document.getElementById('processBtn');
-    
-    if (!text && !file) {
-        e.preventDefault();
-        alert('Please paste text or upload a file to continue.');
-        return false;
+// Audio zone click-to-upload
+const audioZone = document.getElementById('audioZone');
+const audioInput = document.getElementById('audio_file');
+if (audioZone && audioInput) {
+  audioZone.addEventListener('click', () => audioInput.click());
+  audioInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      let el = document.getElementById('audio-name-display');
+      if (!el) { el = document.createElement('div'); el.id = 'audio-name-display'; audioZone.parentNode.appendChild(el); }
+      el.className = 'text-success text-center mt-2 small fw-medium';
+      el.innerHTML = '<i class="bi bi-file-earmark-music me-2"></i>Selected: ' + this.files[0].name;
     }
-    
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
-});
+  });
+}
+
+function prepareSubmit() {
+  const text = document.getElementById('transcript_text').value.trim();
+  const file = document.getElementById('transcript_file').files.length;
+  const audio = document.getElementById('audio_file').files.length;
+  if (!text && !file && !audio) {
+    alert('Please paste text, upload a document, or upload an audio file.');
+    return false;
+  }
+  const btn = document.getElementById('processBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing… this may take a moment';
+  return true;
+}
 </script>
 {% endblock %}

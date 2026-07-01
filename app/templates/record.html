@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block title %}Live Recording — Convoq{% endblock %}
+
+{% block content %}
+<div class="mb-4 animate-fade-in">
+  <h1 class="h2 fw-bold text-gradient mb-1"><i class="bi bi-mic me-2"></i>Live Meeting Recording</h1>
+  <p class="text-muted">Record your meeting in the browser — take notes in the scratchpad, AI will analyse everything when you finish.</p>
+</div>
+
+<!-- Meeting meta form (hidden until submitted) -->
+<form id="recordForm" action="{{ url_for('main.process_transcript') }}" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="audio_file" id="audioFileInput">
+  <input type="hidden" name="scratchpad_notes" id="scratchpadHidden">
+
+  <!-- Config row -->
+  <div class="glass-card p-4 mb-4 animate-fade-in">
+    <div class="row g-3">
+      <div class="col-md-5">
+        <label class="form-label text-muted small">Meeting Title</label>
+        <input type="text" name="meeting_title" class="form-control bg-transparent text-light border-secondary"
+               placeholder="e.g. Product Roadmap Q3" value="{{ prefill_title }}" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Meeting Type</label>
+        <select name="meeting_type" class="form-select bg-dark text-light border-secondary">
+          {% for key, tmpl in meeting_types.items() %}
+          <option value="{{ key }}" {{ 'selected' if key == prefill_type }}>{{ tmpl.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-muted small">Attendees (comma-separated)</label>
+        <input type="text" name="attendees" class="form-control bg-transparent text-light border-secondary"
+               placeholder="Alice, Bob, Charlie" value="{{ prefill_attendees }}">
+      </div>
+    </div>
+  </div>
+
+  <!-- Recorder + Scratchpad split -->
+  <div class="row g-4 mb-4">
+
+    <!-- Left: Scratchpad -->
+    <div class="col-lg-6">
+      <div class="glass-card p-4 h-100 d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-bold mb-0"><i class="bi bi-pencil-square text-primary me-2"></i>Your Notes (Scratchpad)</h6>
+          <span class="badge bg-primary bg-opacity-20 text-primary small">Type freely during the meeting</span>
+        </div>
+        <textarea id="scratchpad" class="form-control bg-transparent text-light border-secondary flex-grow-1"
+                  placeholder="Jot down key points, decisions, names… AI will use these alongside the recording."
+                  style="min-height:380px;resize:none;font-size:.95rem;line-height:1.6"></textarea>
+      </div>
+    </div>
+
+    <!-- Right: Recorder controls + live transcript -->
+    <div class="col-lg-6">
+      <div class="glass-card p-4 h-100 d-flex flex-column">
+
+        <!-- Timer + waveform -->
+        <div class="text-center mb-4">
+          <div id="recStatus" class="mb-3">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:80px;height:80px;background:rgba(99,102,241,.15);border:2px solid rgba(99,102,241,.3)">
+              <i id="micIcon" class="bi bi-mic text-primary" style="font-size:2rem"></i>
+            </div>
+            <div id="timerDisplay" class="fw-bold fs-1 text-gradient" style="font-variant-numeric:tabular-nums">00:00</div>
+            <div id="statusText" class="text-muted small mt-1">Click Start to begin recording</div>
+          </div>
+
+          <!-- Visualiser canvas -->
+          <canvas id="waveform" height="50" class="w-100 mb-3" style="opacity:.6"></canvas>
+
+          <!-- Controls -->
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <button type="button" id="startBtn" class="btn btn-primary-glow px-5 py-3 rounded-pill fw-bold">
+              <i class="bi bi-record-circle me-2"></i>Start Recording
+            </button>
+            <button type="button" id="stopBtn" class="btn btn-danger px-5 py-3 rounded-pill fw-bold d-none">
+              <i class="bi bi-stop-circle me-2"></i>Stop & Analyse
+            </button>
+            <button type="button" id="pauseBtn" class="btn btn-outline-warning px-4 py-3 rounded-pill d-none">
+              <i class="bi bi-pause-circle me-2"></i>Pause
+            </button>
+          </div>
+        </div>
+
+        <!-- Live transcript panel -->
+        <div class="flex-grow-1 overflow-auto p-3 rounded" style="background:rgba(255,255,255,.03);min-height:180px">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <small class="text-muted text-uppercase fw-bold" style="letter-spacing:.06em">Live Transcript</small>
+            <span id="chunkBadge" class="badge bg-secondary d-none">Transcribing…</span>
+          </div>
+          <div id="liveTranscript" class="text-muted small lh-lg" style="white-space:pre-wrap">
+            Transcript will appear here once recording starts and audio is processed.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing overlay (shown on submit) -->
+  <div id="processingOverlay" class="d-none text-center py-5">
+    <div class="spinner-border text-primary mb-3" style="width:3rem;height:3rem"></div>
+    <h5 class="text-muted">Uploading audio and running AI analysis…</h5>
+    <p class="text-muted small">This may take 30-60 seconds for longer recordings.</p>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+<style>
+#waveform { border-radius: 8px; }
+.recording-pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+</style>
+<script>
+let mediaRecorder = null;
+let chunks = [];
+let timerInterval = null;
+let seconds = 0;
+let analyserInterval = null;
+let audioCtx = null;
+let analyser = null;
+let liveTranscript = "";
+let chunkCount = 0;
+
+const startBtn = document.getElementById('startBtn');
+const stopBtn  = document.getElementById('stopBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const micIcon  = document.getElementById('micIcon');
+const timerEl  = document.getElementById('timerDisplay');
+const statusEl = document.getElementById('statusText');
+const transcriptEl = document.getElementById('liveTranscript');
+const canvas   = document.getElementById('waveform');
+const ctx2d    = canvas.getContext('2d');
+const chunkBadge = document.getElementById('chunkBadge');
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function formatTime(s) { return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
+
+function drawWaveform(dataArray) {
+  const W = canvas.width = canvas.offsetWidth;
+  const H = canvas.height;
+  ctx2d.clearRect(0,0,W,H);
+  const sliceW = W / dataArray.length;
+  ctx2d.beginPath();
+  ctx2d.strokeStyle = 'rgba(99,102,241,.8)';
+  ctx2d.lineWidth = 2;
+  let x = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128;
+    const y = v * H / 2;
+    i === 0 ? ctx2d.moveTo(x, y) : ctx2d.lineTo(x, y);
+    x += sliceW;
+  }
+  ctx2d.lineTo(W, H/2);
+  ctx2d.stroke();
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    // Web Audio API for waveform
+    audioCtx = new AudioContext();
+    const source = audioCtx.createMediaStreamSource(stream);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    const bufferLen = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLen);
+
+    analyserInterval = setInterval(() => {
+      analyser.getByteTimeDomainData(dataArray);
+      drawWaveform(dataArray);
+    }, 50);
+
+    // MediaRecorder — 30-second chunks for live transcription
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    chunks = [];
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+    mediaRecorder.start(30000); // collect 30s chunks
+
+    // Intercept chunks for live transcription
+    const origOnData = mediaRecorder.ondataavailable;
+    mediaRecorder.ondataavailable = async (e) => {
+      if (e.data.size > 0) {
+        chunks.push(e.data);
+        // Send chunk for live transcription
+        if (chunkCount > 0) await sendChunkForTranscription(e.data);
+        chunkCount++;
+      }
+    };
+
+    // Timer
+    seconds = 0;
+    timerInterval = setInterval(() => {
+      seconds++;
+      timerEl.textContent = formatTime(seconds);
+    }, 1000);
+
+    startBtn.classList.add('d-none');
+    stopBtn.classList.remove('d-none');
+    pauseBtn.classList.remove('d-none');
+    micIcon.classList.add('text-danger', 'recording-pulse');
+    micIcon.classList.remove('text-primary');
+    statusEl.textContent = 'Recording in progress…';
+
+  } catch (err) {
+    alert('Microphone access denied. Please allow microphone access in your browser.');
+    console.error(err);
+  }
+}
+
+async function sendChunkForTranscription(blob) {
+  chunkBadge.classList.remove('d-none');
+  try {
+    const fd = new FormData();
+    fd.append('audio', blob, 'chunk.webm');
+    const resp = await fetch('/api/transcribe-chunk', { method: 'POST', body: fd });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.transcript) {
+        liveTranscript += (liveTranscript ? '\n' : '') + data.transcript;
+        transcriptEl.textContent = liveTranscript;
+        transcriptEl.scrollTop = transcriptEl.scrollHeight;
+      }
+    }
+  } catch(e) { /* non-fatal */ }
+  chunkBadge.classList.add('d-none');
+}
+
+function stopRecording() {
+  if (!mediaRecorder) return;
+
+  mediaRecorder.stop();
+  clearInterval(timerInterval);
+  clearInterval(analyserInterval);
+
+  mediaRecorder.stream.getTracks().forEach(t => t.stop());
+  if (audioCtx) audioCtx.close();
+
+  micIcon.classList.remove('text-danger','recording-pulse');
+  micIcon.classList.add('text-success');
+  statusEl.textContent = 'Recording stopped. Preparing for analysis…';
+  stopBtn.classList.add('d-none');
+  pauseBtn.classList.add('d-none');
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(chunks, { type: 'audio/webm' });
+    const file = new File([blob], 'recording.webm', { type: 'audio/webm' });
+
+    // Attach to form via DataTransfer
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = 'audio_file';
+    fileInput.files = dt.files;
+
+    const scratchpad = document.getElementById('scratchpad').value;
+    document.getElementById('scratchpadHidden').value = scratchpad;
+
+    const form = document.getElementById('recordForm');
+    // Replace hidden input with real file input
+    const old = form.querySelector('[name="audio_file"]');
+    if (old) old.remove();
+    form.appendChild(fileInput);
+
+    // Show processing overlay and submit
+    document.getElementById('processingOverlay').classList.remove('d-none');
+    document.querySelector('.row.g-4.mb-4').classList.add('d-none');
+    form.submit();
+  };
+}
+
+function togglePause() {
+  if (!mediaRecorder) return;
+  if (mediaRecorder.state === 'recording') {
+    mediaRecorder.pause();
+    clearInterval(timerInterval);
+    pauseBtn.innerHTML = '<i class="bi bi-play-circle me-2"></i>Resume';
+    statusEl.textContent = 'Paused';
+  } else if (mediaRecorder.state === 'paused') {
+    mediaRecorder.resume();
+    timerInterval = setInterval(() => { seconds++; timerEl.textContent = formatTime(seconds); }, 1000);
+    pauseBtn.innerHTML = '<i class="bi bi-pause-circle me-2"></i>Pause';
+    statusEl.textContent = 'Recording in progress…';
+  }
+}
+
+startBtn.addEventListener('click', startRecording);
+stopBtn.addEventListener('click', stopRecording);
+pauseBtn.addEventListener('click', togglePause);
+</script>
+{% endblock %}

@@ -1,18 +1,18 @@
-# Sponsors & Support 💎
+﻿# Sponsors & Support 💎
 
-Thank you for considering sponsoring CorpMeet-AI! Your support helps us maintain and improve this open-source AI-powered meeting minutes tracker that serves teams worldwide.
+Thank you for considering sponsoring Convoq! Your support helps us maintain and improve this open-source Convoq - AI-Powered Meeting Minutes Tracker that serves teams worldwide.
 
 <div align="center">
 
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/Jani-shiv?style=for-the-badge&logo=github&logoColor=white&color=EA4AAA)](https://github.com/sponsors/Jani-shiv)
-[![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/CorpMeetAI)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/corpmeetai)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/Aditya001-max?style=for-the-badge&logo=github&logoColor=white&color=EA4AAA)](https://github.com/sponsors/Aditya001-max)
+[![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/Convoq)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/Convoq)
 
 </div>
 
-## 🌟 Why Sponsor CorpMeet-AI?
+## 🌟 Why Sponsor Convoq?
 
-CorpMeet-AI is transforming how teams handle meeting documentation with cutting-edge AI technology. Your sponsorship enables us to:
+Convoq is transforming how teams handle meeting documentation with cutting-edge AI technology. Your sponsorship enables us to:
 
 - 🚀 **Accelerate Development**: Fast-track new features and improvements
 - 🔒 **Enhance Security**: Implement enterprise-grade security features
@@ -90,7 +90,7 @@ CorpMeet-AI is transforming how teams handle meeting documentation with cutting-
 
 *Be the first to become our Platinum Partner!*
 
-[![Become a Platinum Partner](https://img.shields.io/badge/Become%20a-Platinum%20Partner-9333EA?style=for-the-badge&logo=crown)](https://github.com/sponsors/Jani-shiv)
+[![Become a Platinum Partner](https://img.shields.io/badge/Become%20a-Platinum%20Partner-9333EA?style=for-the-badge&logo=crown)](https://github.com/sponsors/Aditya001-max)
 
 </div>
 
@@ -100,7 +100,7 @@ CorpMeet-AI is transforming how teams handle meeting documentation with cutting-
 
 *Your company logo could be here!*
 
-[![Become a Gold Supporter](https://img.shields.io/badge/Become%20a-Gold%20Supporter-F59E0B?style=for-the-badge&logo=star)](https://github.com/sponsors/Jani-shiv)
+[![Become a Gold Supporter](https://img.shields.io/badge/Become%20a-Gold%20Supporter-F59E0B?style=for-the-badge&logo=star)](https://github.com/sponsors/Aditya001-max)
 
 </div>
 
@@ -110,7 +110,7 @@ CorpMeet-AI is transforming how teams handle meeting documentation with cutting-
 
 *Join our growing community of Silver Supporters!*
 
-[![Become a Silver Supporter](https://img.shields.io/badge/Become%20a-Silver%20Supporter-6B7280?style=for-the-badge&logo=heart)](https://github.com/sponsors/Jani-shiv)
+[![Become a Silver Supporter](https://img.shields.io/badge/Become%20a-Silver%20Supporter-6B7280?style=for-the-badge&logo=heart)](https://github.com/sponsors/Aditya001-max)
 
 </div>
 
@@ -121,7 +121,7 @@ CorpMeet-AI is transforming how teams handle meeting documentation with cutting-
 *Thank you to all our Bronze Supporters!*
 
 <!-- Supporter avatars will be displayed here -->
-<a href="https://github.com/sponsors/Jani-shiv">
+<a href="https://github.com/sponsors/Aditya001-max">
   <img src="https://img.shields.io/badge/25%2B-Bronze%20Supporters-CD7F32?style=for-the-badge&logo=users" alt="Bronze Supporters" />
 </a>
 
@@ -133,8 +133,8 @@ Prefer to make a one-time contribution? We appreciate any amount!
 
 <div align="center">
 
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/CorpMeetAI)
-[![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://donate.stripe.com/corpmeetai)
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/Convoq)
+[![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://donate.stripe.com/Convoq)
 [![Cryptocurrency](https://img.shields.io/badge/Crypto-F7931E?style=for-the-badge&logo=bitcoin&logoColor=white)](#cryptocurrency)
 
 </div>
@@ -148,7 +148,7 @@ Prefer to make a one-time contribution? We appreciate any amount!
 
 ## 🏢 Corporate Sponsorship
 
-### Why Companies Choose CorpMeet-AI
+### Why Companies Choose Convoq
 
 1. **🎯 Open Source Leadership**: Demonstrate commitment to open source innovation
 2. **👥 Developer Community**: Connect with talented developers and potential hires
@@ -221,22 +221,22 @@ Have specific requirements? We offer custom sponsorship packages including:
 
 ## 📞 Contact for Sponsorship
 
-Ready to sponsor CorpMeet-AI? Get in touch!
+Ready to sponsor Convoq? Get in touch!
 
 ### 📧 Email
-**Business Inquiries**: [sponsors@corpmeetai.com](mailto:sponsors@corpmeetai.com)
-**Partnership Questions**: [partnerships@corpmeetai.com](mailto:partnerships@corpmeetai.com)
+**Business Inquiries**: [sponsors@Convoq.com](mailto:sponsors@Convoq.com)
+**Partnership Questions**: [partnerships@Convoq.com](mailto:partnerships@Convoq.com)
 
 ### 📅 Schedule a Call
 Book a 30-minute call to discuss your sponsorship needs:
 
-[![Schedule Call](https://img.shields.io/badge/Schedule-Sponsorship%20Call-4285F4?style=for-the-badge&logo=google-calendar&logoColor=white)](https://calendly.com/corpmeetai/sponsorship)
+[![Schedule Call](https://img.shields.io/badge/Schedule-Sponsorship%20Call-4285F4?style=for-the-badge&logo=google-calendar&logoColor=white)](https://calendly.com/Convoq/sponsorship)
 
 ### 💬 Direct Message
 Reach out on social media:
 
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/CorpMeetAI)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/corpmeetai)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Convoq)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/Convoq)
 
 ## 🎮 Cryptocurrency Donations
 
@@ -257,7 +257,7 @@ Support us with cryptocurrency:
 
 ### 💝 To All Our Sponsors
 
-**Your support makes CorpMeet-AI possible!**
+**Your support makes Convoq possible!**
 
 Every contribution, whether $5 or $5,000, helps us build better tools for teams worldwide. You're not just funding software development – you're investing in the future of collaborative work and AI-powered productivity.
 
@@ -266,7 +266,7 @@ Every contribution, whether $5 or $5,000, helps us build better tools for teams 
 ---
 
 *With gratitude,*
-**The CorpMeet-AI Team** 💙
+**The Convoq Team** 💙
 
 </div>
 
@@ -294,8 +294,8 @@ Every contribution, whether $5 or $5,000, helps us build better tools for teams 
 
 <div align="center">
 
-**Ready to sponsor CorpMeet-AI?**
+**Ready to sponsor Convoq?**
 
-[![Start Sponsoring](https://img.shields.io/badge/💎%20Start%20Sponsoring-CorpMeet--AI-EA4AAA?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/Jani-shiv)
+[![Start Sponsoring](https://img.shields.io/badge/💎%20Start%20Sponsoring-convoq--AI-EA4AAA?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/Aditya001-max)
 
 </div>

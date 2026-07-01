@@ -1,4 +1,4 @@
-name: 🔄 Auto-Update Dependencies
+﻿name: 🔄 Auto-Update Dependencies
 
 on:
   schedule:
@@ -54,7 +54,7 @@ jobs:
         body: |
           ## 📦 Automated Dependency Updates
           
-          This PR contains the weekly automated dependency updates for CorpMeet-AI.
+          This PR contains the weekly automated dependency updates for Convoq.
           
           ### 🔍 Changes Made
           - Updated all Python dependencies to their latest compatible versions
@@ -86,7 +86,7 @@ jobs:
           dependencies
           automated
           maintenance
-        reviewers: Jani-shiv
+        reviewers: Aditya001-max
 
     - name: 📊 Upload Reports
       uses: actions/upload-artifact@v4

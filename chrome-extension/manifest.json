@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Convoq for Google Meet",
+  "version": "1.0.0",
+  "description": "Automatically transcribe and summarise Google Meet calls with Convoq AI.",
+
+  "permissions": [
+    "tabCapture",
+    "activeTab",
+    "storage",
+    "offscreen"
+  ],
+
+  "host_permissions": [
+    "https://meet.google.com/*",
+    "http://localhost:5000/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Convoq — Meeting Recorder",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

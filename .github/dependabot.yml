@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 
 updates:
   # Python dependencies
@@ -11,9 +11,9 @@ updates:
       timezone: "UTC"
     open-pull-requests-limit: 10
     reviewers:
-      - "Jani-shiv"
+      - "Aditya001-max"
     assignees:
-      - "Jani-shiv"
+      - "Aditya001-max"
     commit-message:
       prefix: "📦"
       include: "scope"
@@ -76,9 +76,9 @@ updates:
       timezone: "UTC"
     open-pull-requests-limit: 5
     reviewers:
-      - "Jani-shiv"
+      - "Aditya001-max"
     assignees:
-      - "Jani-shiv"
+      - "Aditya001-max"
     commit-message:
       prefix: "🔄"
       include: "scope"
@@ -109,9 +109,9 @@ updates:
       timezone: "UTC"
     open-pull-requests-limit: 5
     reviewers:
-      - "Jani-shiv"
+      - "Aditya001-max"
     assignees:
-      - "Jani-shiv"
+      - "Aditya001-max"
     commit-message:
       prefix: "🐳"
       include: "scope"

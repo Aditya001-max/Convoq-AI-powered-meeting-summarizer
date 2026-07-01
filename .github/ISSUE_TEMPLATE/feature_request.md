@@ -1,6 +1,6 @@
----
+﻿---
 name: ✨ Feature Request
-about: Suggest an idea for CorpMeet-AI
+about: Suggest an idea for Convoq
 title: '[FEATURE] '
 labels: ['enhancement', 'feature-request']
 assignees: []
@@ -110,4 +110,4 @@ A clear and concise description of any alternative solutions or features you've 
 
 ---
 
-**Thank you for suggesting improvements to CorpMeet-AI! 🚀**
+**Thank you for suggesting improvements to Convoq! 🚀**

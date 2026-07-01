@@ -1,10 +1,10 @@
-# Contributing to CorpMeet-AI 🤝
+﻿# Contributing to Convoq 🤝
 
-Thank you for your interest in contributing to CorpMeet-AI! We welcome contributions from developers of all skill levels. This guide will help you get started with contributing to our AI-powered meeting minutes tracker.
+Thank you for your interest in contributing to Convoq! We welcome contributions from developers of all skill levels. This guide will help you get started with contributing to our Convoq - AI-Powered Meeting Minutes Tracker.
 
 ## 🌟 How to Contribute
 
-There are many ways to contribute to CorpMeet-AI:
+There are many ways to contribute to Convoq:
 
 - 🐛 **Report bugs** and suggest fixes
 - 💡 **Propose new features** and enhancements
@@ -256,7 +256,7 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Windows 10, macOS 12.0, Ubuntu 20.04]
  - Python Version: [e.g. 3.9.7]
  - Browser: [e.g. Chrome 95, Firefox 94]
- - CorpMeet-AI Version: [e.g. 1.0.0]
+ - Convoq Version: [e.g. 1.0.0]
 
 **Additional context**
 Add any other context about the problem here.
@@ -334,8 +334,8 @@ All contributors will be recognized in:
 
 - **GitHub Issues**: Bug reports and feature requests
 - **GitHub Discussions**: Questions and general discussion
-- **Email**: [maintainer@corpmeet-ai.com](mailto:maintainer@corpmeet-ai.com)
-- **Discord**: [Join our Discord](https://discord.gg/corpmeet-ai) (coming soon)
+- **Email**: [maintainer@Convoq.com](mailto:maintainer@Convoq.com)
+- **Discord**: [Join our Discord](https://discord.gg/Convoq) (coming soon)
 
 ### Mentorship
 
@@ -376,11 +376,11 @@ We pledge to make participation in our project a harassment-free experience for 
 
 ### Enforcement
 
-Instances of abusive behavior may be reported to [conduct@corpmeet-ai.com](mailto:conduct@corpmeet-ai.com). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive behavior may be reported to [conduct@Convoq.com](mailto:conduct@Convoq.com). All complaints will be reviewed and investigated promptly and fairly.
 
 ## 🎉 Thank You!
 
-Thank you for contributing to CorpMeet-AI! Your efforts help make meeting management more efficient for teams worldwide. Every contribution, no matter how small, makes a difference.
+Thank you for contributing to Convoq! Your efforts help make meeting management more efficient for teams worldwide. Every contribution, no matter how small, makes a difference.
 
 ---
 

@@ -1,141 +1,408 @@
 {% extends "base.html" %}
-
-{% block title %}Meeting Results - CorpMeet-AI{% endblock %}
+{% block title %}{{ meeting.title }} — Convoq{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
-    <div>
-        <h1 class="h2 fw-bold text-gradient">{{ meeting.title }}</h1>
-        <p class="text-muted"><i class="bi bi-calendar3 me-2"></i>Processed on {{ meeting.date_created.strftime('%B %d, %Y at %I:%M %p') }}</p>
-    </div>
-    <div>
-        <a href="{{ url_for('main.export_pdf', meeting_id=meeting.id) }}" class="btn btn-outline-light btn-sm rounded-pill px-3">
-            <i class="bi bi-download me-2"></i>Export PDF
-        </a>
-    </div>
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-start mb-4 animate-fade-in flex-wrap gap-3">
+  <div>
+    <span class="badge bg-primary bg-opacity-20 text-primary mb-2">{{ meeting.meeting_type | title }}</span>
+    <h1 class="h2 fw-bold text-gradient mb-1">{{ meeting.title }}</h1>
+    <p class="text-muted mb-0">
+      <i class="bi bi-calendar3 me-1"></i>{{ meeting.date_created.strftime('%d %B %Y  %I:%M %p') }}
+      {% if meeting.get_attendees() %}
+      &nbsp;·&nbsp;<i class="bi bi-people me-1"></i>{{ meeting.get_attendees()|join(', ') }}
+      {% endif %}
+    </p>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    <button class="btn btn-outline-info btn-sm rounded-pill px-3" id="shareBtn">
+      <i class="bi bi-share me-1"></i>Share
+    </button>
+    <button class="btn btn-outline-warning btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#recipeModal">
+      <i class="bi bi-stars me-1"></i>Run Recipe
+    </button>
+    <a href="{{ url_for('main.board') }}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+      <i class="bi bi-kanban me-1"></i>Open Board
+    </a>
+    <a href="{{ url_for('main.export_pdf', meeting_id=meeting.id) }}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+      <i class="bi bi-download me-1"></i>Export PDF
+    </a>
+  </div>
 </div>
 
+<!-- Completion bar -->
+{% set total = meeting.total_count %}
+{% if total > 0 %}
+<div class="glass-card p-3 mb-4 animate-fade-in">
+  <div class="d-flex justify-content-between small mb-2">
+    <span class="text-muted">Action item completion</span>
+    <span class="fw-bold">{{ meeting.completion_rate }}%</span>
+  </div>
+  <div class="progress" style="height:8px">
+    <div class="progress-bar bg-success" style="width:{{ meeting.completion_rate }}%"></div>
+  </div>
+  <div class="d-flex gap-3 mt-2 small text-muted">
+    <span><i class="bi bi-circle text-warning me-1"></i>{{ meeting.open_count }} Open</span>
+    <span><i class="bi bi-check-circle text-success me-1"></i>{{ meeting.done_count }} Done</span>
+    {% if meeting.overdue_count > 0 %}
+    <span><i class="bi bi-exclamation-circle text-danger me-1"></i>{{ meeting.overdue_count }} Overdue</span>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
 <div class="row g-4">
-    <!-- Left Column: Insights -->
-    <div class="col-lg-8">
-        <!-- Summary Section -->
-        <div class="glass-card p-4 mb-4 animate-fade-in">
-            <h3 class="h5 mb-3 text-secondary border-bottom border-secondary pb-2">Executive Summary</h3>
-            <ul class="list-unstyled">
-                {% for point in meeting.get_summary() %}
-                    <li class="mb-3 d-flex align-items-start">
-                        <i class="bi bi-check2-circle text-primary me-3 mt-1 fs-5"></i>
-                        <span class="lh-base">{{ point }}</span>
-                    </li>
-                {% else %}
-                    <li class="text-muted">No summary available.</li>
-                {% endfor %}
-            </ul>
-        </div>
+  <!-- Left: main content -->
+  <div class="col-lg-8">
 
-        <!-- Action Items (Cards) -->
-        <div class="mb-4 animate-fade-in delay-100">
-            <h3 class="h5 mb-3 text-secondary">Action Items <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill ms-2">{{ meeting.get_action_items()|length }}</span></h3>
-            <div class="row gx-3">
-                {% for item in meeting.get_action_items() %}
-                <div class="col-md-6 mb-3">
-                    <div class="glass-card p-3 h-100 border-start border-4 border-primary">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="badge bg-secondary bg-opacity-25 text-white">{{ item.owner }}</span>
-                            <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ item.deadline }}</small>
-                        </div>
-                        <p class="mb-0 fw-medium">{{ item.task }}</p>
-                    </div>
-                </div>
-                {% else %}
-                    <p class="text-muted ms-2">No action items detected.</p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Decisions -->
-        <div class="glass-card p-4 mb-4 animate-fade-in delay-200">
-            <h3 class="h5 mb-3 text-secondary border-bottom border-secondary pb-2">Key Decisions</h3>
-            <ul class="list-group list-group-flush bg-transparent">
-                {% for decision in meeting.get_decisions() %}
-                    <li class="list-group-item bg-transparent text-light border-secondary ps-0">
-                        <i class="bi bi-check-square-fill text-success me-2"></i> {{ decision }}
-                    </li>
-                {% else %}
-                    <li class="list-group-item bg-transparent text-muted">No decisions recorded.</li>
-                {% endfor %}
-            </ul>
-        </div>
+    <!-- Summary -->
+    <div class="glass-card p-4 mb-4 animate-fade-in">
+      <h5 class="mb-3 border-bottom border-secondary pb-2">
+        <i class="bi bi-file-text text-primary me-2"></i>Executive Summary
+      </h5>
+      <ul class="list-unstyled mb-0">
+        {% for point in meeting.get_summary() %}
+        <li class="mb-3 d-flex align-items-start">
+          <i class="bi bi-check2-circle text-primary me-3 mt-1 flex-shrink-0"></i>
+          <span>{{ point }}</span>
+        </li>
+        {% else %}
+        <li class="text-muted">No summary generated.</li>
+        {% endfor %}
+      </ul>
     </div>
 
-    <!-- Right Column: Analytics & Chat -->
-    <div class="col-lg-4">
-        <!-- Sentiment & Keywords -->
-        <div class="glass-card p-4 mb-4 animate-fade-in delay-100">
-            <h4 class="h6 text-uppercase text-muted letter-spacing-1 mb-3">Meeting Analytics</h4>
-            
-            <div class="mb-4 text-center">
-                <h1 class="display-4 fw-bold {% if meeting.sentiment == 'Positive' %}text-success{% elif meeting.sentiment == 'Negative' %}text-danger{% else %}text-warning{% endif %}">
-                    {{ meeting.sentiment or 'Neutral' }}
-                </h1>
-                <p class="text-muted small">Overall Sentiment</p>
+    <!-- Action Items -->
+    <div class="mb-4 animate-fade-in delay-100">
+      <h5 class="mb-3">
+        <i class="bi bi-check2-square text-primary me-2"></i>Action Items
+        <span class="badge bg-primary bg-opacity-15 text-primary rounded-pill ms-1">{{ total }}</span>
+      </h5>
+      <div class="row g-3">
+        {% for item in meeting.get_action_items() %}
+        {% set is_high = item.priority == 'High' %}
+        {% set is_done = item.status == 'Done' %}
+        {% set is_overdue = item.is_overdue if item.is_overdue is defined else false %}
+        <div class="col-md-6">
+          <div class="glass-card p-3 h-100 border-start border-4 {{ 'border-danger' if is_high else 'border-primary' }} {{ 'opacity-60' if is_done }}">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div class="d-flex gap-2 flex-wrap">
+                <span class="badge rounded-pill {{ 'bg-danger' if is_high else 'bg-warning text-dark' if item.priority == 'Medium' else 'bg-secondary' }} bg-opacity-80 small">
+                  {{ item.priority }}
+                </span>
+                <span class="badge rounded-pill {{ 'bg-success' if is_done else 'bg-info' if item.status == 'In Progress' else 'bg-danger' if item.status == 'Blocked' else 'bg-secondary' }} bg-opacity-80 small">
+                  {{ item.status }}
+                </span>
+              </div>
+              {% if item.is_overdue %}
+              <span class="badge bg-danger small"><i class="bi bi-exclamation me-1"></i>Overdue</span>
+              {% endif %}
             </div>
-
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-                {% for kw in meeting.get_keywords() %}
-                    <span class="badge rounded-pill bg-light bg-opacity-10 text-light border border-secondary fw-normal px-3 py-2">#{{ kw }}</span>
+            <p class="fw-medium mb-2 {{ 'text-decoration-line-through opacity-60' if is_done }}">{{ item.task }}</p>
+            <div class="d-flex justify-content-between small text-muted">
+              <span><i class="bi bi-person me-1"></i>{{ item.owner }}</span>
+              <span><i class="bi bi-clock me-1"></i>{{ item.due_date }}</span>
+            </div>
+            {% if item.source_quote %}
+            <div class="mt-2 p-2 rounded small text-muted fst-italic border-start border-secondary border-2"
+                 style="background:rgba(255,255,255,.04)">"{{ item.source_quote }}"</div>
+            {% endif %}
+            {% if item.id %}
+            <div class="mt-2">
+              <select class="form-select form-select-sm bg-dark text-light border-secondary status-select"
+                      data-item-id="{{ item.id }}">
+                {% for s in ['Open','In Progress','Blocked','Done'] %}
+                <option value="{{ s }}" {{ 'selected' if item.status == s }}>{{ s }}</option>
                 {% endfor %}
+              </select>
             </div>
+            {% endif %}
+          </div>
         </div>
-
-        <!-- AI Chat Interface -->
-        <div class="glass-card p-0 d-flex flex-column animate-fade-in delay-200 position-sticky shadow-lg" style="top: 100px; height: 500px;">
-            <div class="p-3 border-bottom border-secondary bg-dark bg-opacity-50">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-stars text-warning me-2"></i>Ask AI Assistant</h5>
-            </div>
-            
-            <div class="chat-container flex-grow-1 p-3" id="chatBox">
-                <div class="chat-message chat-bot">
-                    <p class="mb-0 small">Hello! I've analyzed this meeting. Ask me anything about what was discussed.</p>
-                </div>
-            </div>
-
-            <div class="p-3 border-top border-secondary bg-dark bg-opacity-50">
-                <div class="input-group">
-                    <input type="text" id="chatInput" class="form-control bg-transparent text-light border-secondary" placeholder="Ask a question..." onkeypress="handleEnter(event)">
-                    <button class="btn btn-primary" onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
-                </div>
-            </div>
-        </div>
+        {% else %}
+        <p class="text-muted ms-2">No action items detected.</p>
+        {% endfor %}
+      </div>
     </div>
+
+    <!-- Decisions -->
+    <div class="glass-card p-4 mb-4 animate-fade-in delay-200">
+      <h5 class="mb-3 border-bottom border-secondary pb-2">
+        <i class="bi bi-check-square text-success me-2"></i>Key Decisions
+      </h5>
+      <ul class="list-unstyled mb-0">
+        {% for d in meeting.get_decisions() %}
+        <li class="mb-2 d-flex align-items-start">
+          <i class="bi bi-check-square-fill text-success me-2 mt-1 flex-shrink-0"></i>{{ d }}
+        </li>
+        {% else %}
+        <li class="text-muted">No decisions recorded.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Risks -->
+    {% if meeting.get_risks() %}
+    <div class="glass-card p-4 mb-4 animate-fade-in delay-300" style="border-left:4px solid #dc2626">
+      <h5 class="mb-3 border-bottom border-secondary pb-2">
+        <i class="bi bi-exclamation-triangle text-danger me-2"></i>Risks &amp; Blockers
+      </h5>
+      <ul class="list-unstyled mb-0">
+        {% for r in meeting.get_risks() %}
+        <li class="mb-2 d-flex align-items-start text-danger-emphasis">
+          <i class="bi bi-exclamation-circle text-danger me-2 mt-1 flex-shrink-0"></i>{{ r }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- Follow-up email -->
+    {% if meeting.follow_up_email %}
+    <div class="glass-card p-4 mb-4 animate-fade-in delay-300">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0"><i class="bi bi-envelope text-info me-2"></i>Follow-up Email Draft</h5>
+        <button class="btn btn-sm btn-outline-info rounded-pill" onclick="copyEmail()">
+          <i class="bi bi-clipboard me-1"></i>Copy
+        </button>
+      </div>
+      <pre id="emailBody" class="text-light small p-3 rounded"
+           style="background:rgba(255,255,255,.05);white-space:pre-wrap;word-break:break-word">{{ meeting.follow_up_email }}</pre>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Right: Analytics + Chat -->
+  <div class="col-lg-4">
+
+    <!-- Sentiment & Keywords -->
+    <div class="glass-card p-4 mb-4 animate-fade-in">
+      <h6 class="text-uppercase text-muted small letter-spacing-1 mb-3">Meeting Pulse</h6>
+      <div class="text-center mb-3">
+        <div class="display-5 fw-bold
+          {% if meeting.sentiment == 'Positive' or meeting.sentiment == 'Productive' %}text-success
+          {% elif meeting.sentiment == 'Negative' or meeting.sentiment == 'Tense' %}text-danger
+          {% else %}text-warning{% endif %}">
+          {{ meeting.sentiment or 'Neutral' }}
+        </div>
+        <small class="text-muted">Overall Sentiment</small>
+      </div>
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        {% for kw in meeting.get_keywords() %}
+        <span class="badge rounded-pill bg-light bg-opacity-10 text-light border border-secondary fw-normal px-3 py-2">#{{ kw }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="glass-card p-0 d-flex flex-column position-sticky shadow-lg" style="top:90px;height:480px">
+      <div class="p-3 border-bottom border-secondary">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-stars text-warning me-2"></i>Ask AI About This Meeting</h6>
+      </div>
+      <div class="chat-container flex-grow-1 p-3 overflow-auto" id="chatBox">
+        <div class="chat-message chat-bot">
+          <p class="mb-0 small">Hi! I've analysed this meeting. What would you like to know?</p>
+        </div>
+      </div>
+      <div class="p-3 border-top border-secondary">
+        <div class="input-group">
+          <input type="text" id="chatInput" class="form-control bg-transparent text-light border-secondary"
+                 placeholder="Ask a question…" onkeypress="handleEnter(event)">
+          <button class="btn btn-primary" onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- Quick Actions -->
-<div class="row g-3 mt-5 text-center">
-    <div class="col-md-4">
-        <a href="{{ url_for('main.export_pdf', meeting_id=meeting.id) }}" class="text-decoration-none">
-            <div class="text-danger"><i class="bi bi-file-earmark-pdf" style="font-size: 2rem;"></i></div>
-            <strong>Download PDF</strong>
-        </a>
-    </div>
-    <div class="col-md-4">
-        <a href="{{ url_for('main.past_meetings') }}" class="text-decoration-none">
-            <div class="text-info"><i class="bi bi-clock-history" style="font-size: 2rem;"></i></div>
-            <strong>View All Meetings</strong>
-        </a>
-    </div>
-    <div class="col-md-4">
-        <a href="{{ url_for('main.upload_page') }}" class="text-decoration-none">
-            <div class="text-success"><i class="bi bi-plus-circle" style="font-size: 2rem;"></i></div>
-            <strong>Process Another</strong>
-        </a>
-    </div>
+<div class="row g-3 mt-4 text-center animate-fade-in">
+  <div class="col-md-3">
+    <a href="{{ url_for('main.export_pdf', meeting_id=meeting.id) }}" class="text-decoration-none d-block p-3 glass-card">
+      <i class="bi bi-file-earmark-pdf text-danger fs-3 d-block mb-2"></i><strong>Export PDF</strong>
+    </a>
+  </div>
+  <div class="col-md-3">
+    <a href="{{ url_for('main.board') }}" class="text-decoration-none d-block p-3 glass-card">
+      <i class="bi bi-kanban text-primary fs-3 d-block mb-2"></i><strong>Execution Board</strong>
+    </a>
+  </div>
+  <div class="col-md-3">
+    <a href="{{ url_for('main.past_meetings') }}" class="text-decoration-none d-block p-3 glass-card">
+      <i class="bi bi-clock-history text-info fs-3 d-block mb-2"></i><strong>All Meetings</strong>
+    </a>
+  </div>
+  <div class="col-md-3">
+    <a href="{{ url_for('main.upload_page') }}" class="text-decoration-none d-block p-3 glass-card">
+      <i class="bi bi-plus-circle text-success fs-3 d-block mb-2"></i><strong>New Meeting</strong>
+    </a>
+  </div>
 </div>
 {% endblock %}
 
+<!-- Share link panel (hidden until share is clicked) -->
+<div id="shareLinkPanel" class="glass-card p-3 mb-4 d-none animate-fade-in">
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+    <i class="bi bi-link-45deg text-info fs-4 flex-shrink-0"></i>
+    <div class="flex-grow-1">
+      <div class="text-muted small mb-1">Shareable link (anyone with this link can view)</div>
+      <input type="text" id="shareLinkInput" class="form-control form-control-sm bg-transparent text-light border-secondary" readonly>
+    </div>
+    <button class="btn btn-sm btn-info rounded-pill px-3 flex-shrink-0" onclick="copyShareLink()">
+      <i class="bi bi-clipboard me-1"></i>Copy
+    </button>
+    <button class="btn btn-sm btn-outline-danger rounded-pill px-3 flex-shrink-0" id="revokeBtn">
+      <i class="bi bi-x-circle me-1"></i>Revoke
+    </button>
+  </div>
+</div>
+
+<!-- Recipe modal -->
+<div class="modal fade" id="recipeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold"><i class="bi bi-stars text-warning me-2"></i>Run AI Recipe</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label text-muted small">Choose a recipe</label>
+        <select class="form-select bg-dark text-light border-secondary mb-3" id="recipeSelect">
+          {% for recipe in recipes %}
+          <option value="{{ recipe.id }}">{{ recipe.name }}{% if not recipe.is_builtin %} (custom){% endif %}</option>
+          {% endfor %}
+        </select>
+        <div id="recipeResult" class="d-none">
+          <hr class="border-secondary">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold mb-0 text-warning" id="recipeResultTitle"></h6>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="copyRecipeResult()">
+              <i class="bi bi-clipboard me-1"></i>Copy
+            </button>
+          </div>
+          <pre id="recipeResultBody" class="text-light small p-3 rounded"
+               style="background:rgba(255,255,255,.04);white-space:pre-wrap;word-break:break-word;max-height:340px;overflow-y:auto"></pre>
+        </div>
+        <div id="recipeSpinner" class="text-center py-4 d-none">
+          <div class="spinner-border text-warning"></div>
+          <p class="text-muted small mt-2">Running recipe with Claude AI…</p>
+        </div>
+      </div>
+      <div class="modal-footer border-secondary">
+        <a href="{{ url_for('main.recipes') }}" class="btn btn-outline-secondary rounded-pill me-auto btn-sm">
+          <i class="bi bi-grid me-1"></i>All Recipes
+        </a>
+        <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning rounded-pill px-4" id="runRecipeBtn">
+          <i class="bi bi-play-fill me-1"></i>Run
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% block scripts %}
 <script>
-    // Set meeting ID for the chat functionality in app.js
-    window.meetingId = {{ meeting.id }};
+window.meetingId = {{ meeting.id }};
+
+// Inline status update
+document.querySelectorAll('.status-select').forEach(sel => {
+  sel.addEventListener('change', async function() {
+    const id = this.dataset.itemId;
+    const status = this.value;
+    try {
+      const r = await fetch(`/api/action-items/${id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({status})
+      });
+      if (r.ok) {
+        const card = this.closest('.glass-card');
+        const title = card.querySelector('.fw-medium');
+        if (status === 'Done') {
+          card.style.opacity = '0.6';
+          title.classList.add('text-decoration-line-through');
+        } else {
+          card.style.opacity = '1';
+          title.classList.remove('text-decoration-line-through');
+        }
+      }
+    } catch(e) { console.error(e); }
+  });
+});
+
+function copyEmail() {
+  const text = document.getElementById('emailBody').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target.closest('button');
+    btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy', 2000);
+  });
+}
+
+// ── Share ──────────────────────────────────────────────────────────────────
+document.getElementById('shareBtn')?.addEventListener('click', async () => {
+  const panel = document.getElementById('shareLinkPanel');
+  if (!panel.classList.contains('d-none')) {
+    panel.classList.add('d-none');
+    return;
+  }
+  try {
+    const resp = await fetch(`/api/meetings/${window.meetingId}/share`, { method: 'POST' });
+    const data = await resp.json();
+    document.getElementById('shareLinkInput').value = data.url;
+    panel.classList.remove('d-none');
+  } catch(e) { alert('Could not generate share link.'); }
+});
+
+document.getElementById('revokeBtn')?.addEventListener('click', async () => {
+  if (!confirm('Revoke the public share link? Anyone with the current link will lose access.')) return;
+  await fetch(`/api/meetings/${window.meetingId}/share`, { method: 'DELETE' });
+  document.getElementById('shareLinkPanel').classList.add('d-none');
+});
+
+function copyShareLink() {
+  const input = document.getElementById('shareLinkInput');
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = event.target.closest('button');
+    btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy', 2000);
+  });
+}
+
+// ── Recipe runner ──────────────────────────────────────────────────────────
+document.getElementById('runRecipeBtn')?.addEventListener('click', async () => {
+  const recipeId = document.getElementById('recipeSelect').value;
+  if (!recipeId) return;
+
+  const spinner = document.getElementById('recipeSpinner');
+  const result  = document.getElementById('recipeResult');
+  spinner.classList.remove('d-none');
+  result.classList.add('d-none');
+
+  try {
+    const resp = await fetch(`/api/recipes/${recipeId}/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ meeting_id: window.meetingId })
+    });
+    const data = await resp.json();
+    document.getElementById('recipeResultTitle').textContent = data.recipe_name || 'Result';
+    document.getElementById('recipeResultBody').textContent = data.result || '(No output)';
+    result.classList.remove('d-none');
+  } catch(e) { alert('Error running recipe.'); }
+  finally { spinner.classList.add('d-none'); }
+});
+
+function copyRecipeResult() {
+  const text = document.getElementById('recipeResultBody').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target.closest('button');
+    btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy', 2000);
+  });
+}
 </script>
 {% endblock %}

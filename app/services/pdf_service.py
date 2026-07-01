@@ -1,194 +1,182 @@
 """
-PDF generation module for CorpMeet-AI application.
+PDF generation module for Convoq.
 Creates professional meeting minutes PDFs using ReportLab.
 """
 
 import os
 from datetime import datetime
+
 from flask import current_app
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus import (
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
+    Table,
+    TableStyle,
+)
 
-# ... imports ...
+BLUE = colors.HexColor("#1e40af")
+LIGHT_BLUE = colors.HexColor("#f1f5f9")
+GRID = colors.HexColor("#e2e8f0")
+STRIPE = colors.HexColor("#f8fafc")
+RED = colors.HexColor("#dc2626")
+AMBER = colors.HexColor("#d97706")
+GREEN = colors.HexColor("#16a34a")
 
 
 def create_meeting_minutes_pdf(meeting, output_path=None):
-    # ...
     if not output_path:
         safe_title = "".join(
             c for c in meeting.title if c.isalnum() or c in (" ", "-", "_")
         ).rstrip()
         date_str = meeting.date_created.strftime("%Y%m%d_%H%M")
-        filename = f"meeting_minutes_{safe_title}_{date_str}.pdf".replace(" ", "_")
-        # Use absolute path from current_app config or static folder
+        filename = f"convoq_{safe_title}_{date_str}.pdf".replace(" ", "_")
         output_path = os.path.join(
             current_app.root_path, "static", "downloads", filename
         )
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    # ...
 
-    # Create the PDF document
     doc = SimpleDocTemplate(
         output_path,
         pagesize=A4,
-        rightMargin=72,
-        leftMargin=72,
-        topMargin=72,
-        bottomMargin=72,
+        rightMargin=60,
+        leftMargin=60,
+        topMargin=60,
+        bottomMargin=60,
     )
 
-    # Container for the 'Flowable' objects
+    styles = getSampleStyleSheet()
     story = []
 
-    # Get styles
-    styles = getSampleStyleSheet()
-
-    # Create custom styles
     title_style = ParagraphStyle(
-        "CustomTitle",
-        parent=styles["Heading1"],
-        fontSize=20,
-        spaceAfter=30,
-        alignment=TA_CENTER,
-        textColor=colors.HexColor("#1e3a8a"),  # Corporate blue
+        "Title", parent=styles["Heading1"],
+        fontSize=22, spaceAfter=4, alignment=TA_CENTER,
+        textColor=BLUE,
     )
-
-    heading_style = ParagraphStyle(
-        "CustomHeading",
-        parent=styles["Heading2"],
-        fontSize=14,
-        spaceAfter=12,
-        spaceBefore=20,
-        textColor=colors.HexColor("#1e40af"),
-    )
-
-    body_style = ParagraphStyle(
-        "CustomBody", parent=styles["Normal"], fontSize=11, spaceAfter=6, leftIndent=20
-    )
-
-    # Add title
-    title = Paragraph("MEETING MINUTES", title_style)
-    story.append(title)
-    story.append(Spacer(1, 12))
-
-    # Add meeting details header
-    meeting_info = [
-        ["Meeting Title:", meeting.title],
-        ["Date & Time:", meeting.date_created.strftime("%B %d, %Y at %I:%M %p")],
-        ["Generated:", datetime.now().strftime("%B %d, %Y at %I:%M %p")],
-        [
-            "Sentiment:",
-            getattr(meeting, "sentiment", "N/A"),
-        ],  # Handle potential missing attr
-        ["Key Topics:", ", ".join(meeting.get_keywords()[:5])],  # Limit to 5 keywords
-    ]
-
-    meeting_table = Table(meeting_info, colWidths=[2 * inch, 4 * inch])
-    meeting_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#f1f5f9")),
-                ("TEXTCOLOR", (0, 0), (0, -1), colors.HexColor("#1e40af")),
-                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
-                ("FONTNAME", (1, 0), (1, -1), "Helvetica"),
-                ("FONTSIZE", (0, 0), (-1, -1), 11),
-                ("GRID", (0, 0), (-1, -1), 1, colors.HexColor("#e2e8f0")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                (
-                    "ROWBACKGROUNDS",
-                    (0, 0),
-                    (-1, -1),
-                    [colors.white, colors.HexColor("#f8fafc")],
-                ),
-            ]
-        )
-    )
-
-    story.append(meeting_table)
-    story.append(Spacer(1, 30))
-
-    # Add meeting summary
-    if meeting.get_summary():
-        story.append(Paragraph("MEETING SUMMARY", heading_style))
-        for point in meeting.get_summary():
-            bullet_point = Paragraph(f"• {point}", body_style)
-            story.append(bullet_point)
-        story.append(Spacer(1, 20))
-
-    # Add action items
-    if meeting.get_action_items():
-        story.append(Paragraph("ACTION ITEMS", heading_style))
-
-        # Create action items table
-        action_data = [["Task", "Assigned To", "Deadline"]]
-
-        for item in meeting.get_action_items():
-            action_data.append(
-                [
-                    item.get("task", "N/A"),
-                    item.get("owner", "N/A"),
-                    item.get("deadline", "N/A"),
-                ]
-            )
-
-        action_table = Table(action_data, colWidths=[3 * inch, 1.5 * inch, 1.5 * inch])
-        action_table.setStyle(
-            TableStyle(
-                [
-                    # Header row styling
-                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1e40af")),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-                    ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                    ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-                    ("FONTSIZE", (0, 0), (-1, -1), 10),
-                    ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-                    ("BACKGROUND", (0, 1), (-1, -1), colors.white),
-                    ("GRID", (0, 0), (-1, -1), 1, colors.HexColor("#e2e8f0")),
-                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                    (
-                        "ROWBACKGROUNDS",
-                        (0, 1),
-                        (-1, -1),
-                        [colors.white, colors.HexColor("#f8fafc")],
-                    ),
-                ]
-            )
-        )
-
-        story.append(action_table)
-        story.append(Spacer(1, 20))
-
-    # Add key decisions
-    if meeting.get_decisions():
-        story.append(Paragraph("KEY DECISIONS", heading_style))
-        for decision in meeting.get_decisions():
-            decision_point = Paragraph(f"• {decision}", body_style)
-            story.append(decision_point)
-        story.append(Spacer(1, 20))
-
-    # Add footer information
-    story.append(Spacer(1, 30))
-    footer_style = ParagraphStyle(
-        "Footer",
-        parent=styles["Normal"],
-        fontSize=9,
-        alignment=TA_CENTER,
+    subtitle_style = ParagraphStyle(
+        "Sub", parent=styles["Normal"],
+        fontSize=11, spaceAfter=24, alignment=TA_CENTER,
         textColor=colors.grey,
     )
+    section_style = ParagraphStyle(
+        "Section", parent=styles["Heading2"],
+        fontSize=13, spaceAfter=8, spaceBefore=18,
+        textColor=BLUE, borderPad=2,
+    )
+    body_style = ParagraphStyle(
+        "Body", parent=styles["Normal"],
+        fontSize=10, spaceAfter=5, leftIndent=12,
+    )
+    risk_style = ParagraphStyle(
+        "Risk", parent=styles["Normal"],
+        fontSize=10, spaceAfter=5, leftIndent=12,
+        textColor=RED,
+    )
 
-    footer_text = "Generated by CorpMeet-AI - AI-Powered Meeting Minutes Tracker"
-    story.append(Paragraph(footer_text, footer_style))
+    # Title block
+    story.append(Paragraph("MEETING MINUTES", title_style))
+    story.append(Paragraph("Powered by Convoq AI", subtitle_style))
 
-    # Build the PDF
+    # Meta table
+    meta = [
+        ["Meeting Title:", meeting.title],
+        ["Meeting Type:", meeting.meeting_type.title()],
+        ["Date & Time:", meeting.date_created.strftime("%d %B %Y  %I:%M %p")],
+        ["Sentiment:", meeting.sentiment or "N/A"],
+        ["Attendees:", ", ".join(meeting.get_attendees()) or "N/A"],
+        ["Keywords:", ", ".join(meeting.get_keywords()[:6]) or "N/A"],
+        ["Generated:", datetime.now().strftime("%d %B %Y  %I:%M %p")],
+    ]
+    meta_table = Table(meta, colWidths=[1.8 * inch, 4.7 * inch])
+    meta_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), LIGHT_BLUE),
+        ("TEXTCOLOR", (0, 0), (0, -1), BLUE),
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("FONTNAME", (1, 0), (1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("GRID", (0, 0), (-1, -1), 0.5, GRID),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("ROWBACKGROUNDS", (0, 0), (-1, -1), [colors.white, STRIPE]),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
+    story.append(meta_table)
+
+    # Summary
+    if meeting.get_summary():
+        story.append(Paragraph("EXECUTIVE SUMMARY", section_style))
+        for point in meeting.get_summary():
+            story.append(Paragraph(f"• {point}", body_style))
+
+    # Action Items
+    action_items = meeting.get_action_items()
+    if action_items:
+        story.append(Paragraph("ACTION ITEMS", section_style))
+        header = [["Task", "Owner", "Due Date", "Priority", "Status"]]
+        rows = []
+        for item in action_items:
+            rows.append([
+                item.get("task", ""),
+                item.get("owner", "Unassigned"),
+                item.get("due_date", "TBD"),
+                item.get("priority", "Medium"),
+                item.get("status", "Open"),
+            ])
+        action_table = Table(
+            header + rows,
+            colWidths=[2.5 * inch, 1.1 * inch, 0.9 * inch, 0.8 * inch, 0.9 * inch],
+        )
+        action_table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), BLUE),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, -1), 9),
+            ("GRID", (0, 0), (-1, -1), 0.5, GRID),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, STRIPE]),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("TOPPADDING", (0, 0), (-1, -1), 5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ]))
+        story.append(action_table)
+
+    # Decisions
+    if meeting.get_decisions():
+        story.append(Paragraph("KEY DECISIONS", section_style))
+        for d in meeting.get_decisions():
+            story.append(Paragraph(f"✓  {d}", body_style))
+
+    # Risks
+    if meeting.get_risks():
+        story.append(Paragraph("RISKS & BLOCKERS", section_style))
+        for r in meeting.get_risks():
+            story.append(Paragraph(f"⚠  {r}", risk_style))
+
+    # Follow-up email
+    if meeting.follow_up_email:
+        story.append(Paragraph("FOLLOW-UP EMAIL DRAFT", section_style))
+        for line in meeting.follow_up_email.split("\n"):
+            story.append(Paragraph(line or " ", body_style))
+
+    # Footer
+    story.append(Spacer(1, 24))
+    footer_style = ParagraphStyle(
+        "Footer", parent=styles["Normal"],
+        fontSize=8, alignment=TA_CENTER, textColor=colors.grey,
+    )
+    story.append(Paragraph(
+        f"Generated by Convoq — AI-Powered Meeting Minutes  •  {datetime.now().strftime('%d %b %Y')}",
+        footer_style,
+    ))
+
     doc.build(story)
-
     return output_path
-
-
-def create_downloads_directory():
-    """Ensure the downloads directory exists for PDF files."""
-    download_path = os.path.join("static", "downloads")
-    os.makedirs(download_path, exist_ok=True)
-    return download_path

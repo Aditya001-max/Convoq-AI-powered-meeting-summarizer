@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Execution Board — Convoq{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in flex-wrap gap-3">
+  <div>
+    <h1 class="h2 fw-bold text-gradient mb-1"><i class="bi bi-kanban me-2"></i>Execution Board</h1>
+    <p class="text-muted mb-0">{{ total }} action items across all meetings</p>
+  </div>
+  <div class="d-flex gap-3 align-items-center">
+    <div class="text-center">
+      <div class="fw-bold fs-4 {{ 'text-success' if accountability >= 70 else 'text-warning' if accountability >= 40 else 'text-danger' }}">
+        {{ accountability }}%
+      </div>
+      <small class="text-muted">Accountability Score</small>
+    </div>
+    <a href="{{ url_for('main.upload_page') }}" class="btn btn-primary-glow btn-sm rounded-pill px-4">
+      <i class="bi bi-plus-lg me-1"></i>New Meeting
+    </a>
+  </div>
+</div>
+
+{% if total == 0 %}
+<div class="text-center py-5 glass-card">
+  <i class="bi bi-kanban text-muted" style="font-size:5rem"></i>
+  <h3 class="text-muted mt-3">Board is empty</h3>
+  <p class="text-muted">Process a meeting to populate the board with action items.</p>
+  <a href="{{ url_for('main.upload_page') }}" class="btn btn-primary mt-2">
+    <i class="bi bi-plus-circle me-2"></i>Process First Meeting
+  </a>
+</div>
+{% else %}
+
+<!-- Filter bar -->
+<div class="glass-card p-3 mb-4 d-flex gap-3 flex-wrap align-items-center">
+  <span class="text-muted small fw-bold text-uppercase">Filter</span>
+  <select class="form-select form-select-sm w-auto bg-dark text-light border-secondary" id="filterOwner">
+    <option value="">All owners</option>
+    {% set owners = [] %}
+    {% for col in columns.values() %}{% for item in col %}{% if item.owner and item.owner not in owners %}{% set _ = owners.append(item.owner) %}{% endif %}{% endfor %}{% endfor %}
+    {% for owner in owners | sort %}
+    <option>{{ owner }}</option>
+    {% endfor %}
+  </select>
+  <select class="form-select form-select-sm w-auto bg-dark text-light border-secondary" id="filterPriority">
+    <option value="">All priorities</option>
+    <option>High</option><option>Medium</option><option>Low</option>
+  </select>
+  <label class="form-check-label small text-muted d-flex align-items-center gap-2">
+    <input type="checkbox" class="form-check-input" id="filterOverdue"> Overdue only
+  </label>
+  <span class="ms-auto small text-muted" id="filterCount">Showing {{ total }}</span>
+</div>
+
+<!-- Board columns -->
+<div class="row g-3 board-grid">
+  {% set col_meta = {
+    'Open':        {'icon': 'bi-circle',          'color': 'text-warning',  'header': 'bg-warning'},
+    'In Progress': {'icon': 'bi-arrow-right-circle','color': 'text-info',   'header': 'bg-info'},
+    'Blocked':     {'icon': 'bi-slash-circle',     'color': 'text-danger',  'header': 'bg-danger'},
+    'Done':        {'icon': 'bi-check-circle',     'color': 'text-success', 'header': 'bg-success'},
+  } %}
+  {% for col_name, items in columns.items() %}
+  {% set meta = col_meta[col_name] %}
+  <div class="col-lg-3 col-md-6">
+    <div class="glass-card p-0 h-100 kanban-column" data-status="{{ col_name }}"
+         ondragover="event.preventDefault()" ondrop="drop(event, '{{ col_name }}')">
+      <!-- Column header -->
+      <div class="p-3 d-flex justify-content-between align-items-center border-bottom border-secondary {{ meta.header }} bg-opacity-20 rounded-top">
+        <h6 class="mb-0 fw-bold {{ meta.color }}">
+          <i class="bi {{ meta.icon }} me-2"></i>{{ col_name }}
+        </h6>
+        <span class="badge bg-light text-dark rounded-pill">{{ items|length }}</span>
+      </div>
+      <!-- Cards -->
+      <div class="p-2 kanban-cards" id="col-{{ col_name | replace(' ', '-') }}" style="min-height:300px">
+        {% for item in items %}
+        <div class="kanban-card glass-card p-3 mb-2 border-start border-3
+             {{ 'border-danger' if item.priority == 'High' else 'border-warning' if item.priority == 'Medium' else 'border-secondary' }}"
+             draggable="true"
+             data-item-id="{{ item.id }}"
+             data-owner="{{ item.owner }}"
+             data-priority="{{ item.priority }}"
+             data-overdue="{{ 'true' if item.is_overdue() else 'false' }}"
+             ondragstart="dragStart(event)">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge rounded-pill small {{ 'bg-danger' if item.priority == 'High' else 'bg-warning text-dark' if item.priority == 'Medium' else 'bg-secondary' }}">
+              {{ item.priority }}
+            </span>
+            {% if item.is_overdue() %}
+            <span class="badge bg-danger small"><i class="bi bi-exclamation me-1"></i>Overdue</span>
+            {% endif %}
+          </div>
+          <p class="small fw-medium mb-2 lh-sm">{{ item.task }}</p>
+          <div class="d-flex justify-content-between small text-muted">
+            <span><i class="bi bi-person me-1"></i>{{ item.owner }}</span>
+            <span><i class="bi bi-clock me-1"></i>{{ item.due_date }}</span>
+          </div>
+          <div class="mt-2">
+            <a href="{{ url_for('main.view_results', meeting_id=item.meeting_id) }}"
+               class="small text-muted text-decoration-none">
+              <i class="bi bi-journal-text me-1"></i>
+              <span class="text-truncate d-inline-block" style="max-width:130px;vertical-align:bottom">{{ item.meeting.title }}</span>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+.kanban-card { cursor: grab; transition: transform .15s, box-shadow .15s; }
+.kanban-card:active { cursor: grabbing; }
+.kanban-card.dragging { opacity: .4; transform: rotate(2deg); }
+.kanban-column.drag-over { outline: 2px dashed rgba(99,102,241,.6); }
+</style>
+<script>
+let draggingId = null;
+
+function dragStart(e) {
+  draggingId = e.currentTarget.dataset.itemId;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+document.querySelectorAll('.kanban-card').forEach(c => {
+  c.addEventListener('dragend', () => c.classList.remove('dragging'));
+});
+
+document.querySelectorAll('.kanban-column').forEach(col => {
+  col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
+  col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+});
+
+async function drop(e, newStatus) {
+  e.preventDefault();
+  const col = e.currentTarget;
+  col.classList.remove('drag-over');
+  if (!draggingId) return;
+
+  const card = document.querySelector(`[data-item-id="${draggingId}"]`);
+  const targetList = col.querySelector('.kanban-cards');
+  if (card && targetList) {
+    targetList.appendChild(card);
+  }
+
+  try {
+    await fetch(`/api/action-items/${draggingId}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status: newStatus})
+    });
+    // Update overdue badge visibility
+    const overdueBadge = card.querySelector('.badge.bg-danger');
+    const statusBadgeRow = col.querySelector('.badge.bg-light');
+    // Refresh counts in column headers (simple approach: reload)
+  } catch(err) { console.error(err); }
+  draggingId = null;
+}
+
+// Filtering
+function applyFilters() {
+  const owner = document.getElementById('filterOwner').value.toLowerCase();
+  const priority = document.getElementById('filterPriority').value;
+  const overdueOnly = document.getElementById('filterOverdue').checked;
+  let visible = 0;
+
+  document.querySelectorAll('.kanban-card').forEach(card => {
+    const matchOwner = !owner || card.dataset.owner.toLowerCase().includes(owner);
+    const matchPriority = !priority || card.dataset.priority === priority;
+    const matchOverdue = !overdueOnly || card.dataset.overdue === 'true';
+    const show = matchOwner && matchPriority && matchOverdue;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('filterCount').textContent = `Showing ${visible}`;
+}
+
+['filterOwner','filterPriority'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', applyFilters);
+});
+document.getElementById('filterOverdue')?.addEventListener('change', applyFilters);
+</script>
+{% endblock %}
